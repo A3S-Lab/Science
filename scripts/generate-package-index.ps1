@@ -47,7 +47,6 @@ function ConvertFrom-JsonString {
 
 $taxonomy = Get-Content -LiteralPath (Join-Path $dataPath "taxonomy.json") -Raw -Encoding UTF8 | ConvertFrom-Json
 $manifest = Get-Content -LiteralPath (Join-Path $dataPath "catalog-manifest.json") -Raw -Encoding UTF8 | ConvertFrom-Json
-$roadmaps = Read-JsonLines (Join-Path $dataPath "roadmaps.jsonl")
 $resources = @(
     (Read-JsonLines (Join-Path $dataPath "native.jsonl")) +
     (Read-JsonLines (Join-Path $dataPath "ecosystem.jsonl")) +
@@ -62,10 +61,6 @@ $capabilityNames = @{}
 foreach ($entry in @($taxonomy.capabilities)) {
     $capabilityNames[[string]$entry.id] = [string]$entry.nameZh
 }
-$roadmapLookup = @{}
-foreach ($entry in $roadmaps) {
-    $roadmapLookup[[string]$entry.resourceId] = $entry
-}
 
 $kindLabels = '{"Skill":"\u79d1\u7814\u6280\u80fd","MCP":"MCP \u670d\u52a1","Software":"\u79d1\u7814\u8f6f\u4ef6","Agent":"\u79d1\u7814\u667a\u80fd\u4f53","Workbench":"\u79d1\u7814\u5de5\u4f5c\u53f0"}' | ConvertFrom-Json
 $ideographicComma = ConvertFrom-JsonString "\u3001"
@@ -78,11 +73,11 @@ $workflowRoleZh = ConvertFrom-JsonString "\u539f\u751f\u5de5\u4f5c\u6d41\u5305"
 $workflowContentZh = ConvertFrom-JsonString "A3S \u539f\u751f\u79d1\u7814\u6280\u80fd\u53ca\u5176\u811a\u672c\u3001\u53c2\u8003\u8d44\u6599\u4e0e\u8f7b\u91cf\u5de5\u4f5c\u6d41\u8d44\u4ea7"
 $interfaceRoleZh = ConvertFrom-JsonString "MCP \u5165\u53e3\u5305"
 $interfaceContentZh = ConvertFrom-JsonString "MCP \u670d\u52a1\u77e5\u8bc6\u5361\u3001\u63a5\u53e3\u5951\u7ea6\u4e0e\u6e90\u9879\u76ee\u5165\u53e3\uff1b\u670d\u52a1\u8fd0\u884c\u65f6\u4ecd\u6309\u4e0a\u6e38\u8981\u6c42\u51c6\u5907"
-$blueprintRoleZh = ConvertFrom-JsonString "\u73b0\u4ee3\u5316\u84dd\u56fe\u5305"
-$blueprintContentZh = ConvertFrom-JsonString "\u8f6f\u4ef6\u77e5\u8bc6\u5361\u4e0e\u72ec\u7acb\u3001\u8de8\u5e73\u53f0\u7684\u73b0\u4ee3\u5316\u7814\u53d1\u84dd\u56fe\uff1b\u4e0d\u5305\u542b\u539f\u5546\u4e1a\u8f6f\u4ef6\u5b89\u88c5\u7a0b\u5e8f"
+$referenceRoleZh = ConvertFrom-JsonString "\u76ee\u5f55\u8d44\u6599\u5305"
+$referenceContentZh = ConvertFrom-JsonString "\u8f6f\u4ef6\u76ee\u5f55\u4fe1\u606f\u3001\u5206\u7c7b\u4e0e\u6765\u6e90\u94fe\u63a5\uff1b\u4e0d\u5305\u542b\u539f\u8f6f\u4ef6\u5b89\u88c5\u7a0b\u5e8f"
 $adapterSummaryTemplate = ConvertFrom-JsonString "{0} \u662f\u9762\u5411{1}\u7684{2}\u5957\u4ef6\uff0c\u4e3b\u8981\u8986\u76d6{3}\u3002"
 $workflowSummaryTemplate = ConvertFrom-JsonString "{0} \u662f A3S Science \u9762\u5411{1}\u63d0\u4f9b\u7684{2}\u5957\u4ef6\uff0c\u4e3b\u8981\u8986\u76d6{3}\u3002"
-$blueprintSummaryTemplate = ConvertFrom-JsonString "{0}\u3002\u672c\u5305\u63d0\u4f9b\u9762\u5411 Windows\u3001macOS\u3001Linux \u4e0e Web \u7684\u72ec\u7acb\u73b0\u4ee3\u5316\u7814\u53d1\u84dd\u56fe\u3002"
+$referenceSummaryTemplate = ConvertFrom-JsonString "{0}\u3002\u672c\u5305\u4fdd\u5b58\u76ee\u5f55\u4fe1\u606f\u3001\u5206\u7c7b\u4e0e\u6765\u6e90\u94fe\u63a5\u3002"
 
 $lines = [System.Collections.Generic.List[string]]::new()
 $packageIds = [System.Collections.Generic.HashSet[string]]::new()
@@ -122,14 +117,13 @@ foreach ($resource in ($resources | Sort-Object -Property id)) {
         $installContentZh = $interfaceContentZh
         $summaryZh = $workflowSummaryTemplate -f $resource.name, $disciplineText, $kindZh, $capabilityText
     } elseif ([string]$resource.origin -eq "sciencesoftware") {
-        $packageRole = "blueprint"
-        $packageRoleZh = $blueprintRoleZh
-        $installContentZh = $blueprintContentZh
+        $packageRole = "reference"
+        $packageRoleZh = $referenceRoleZh
+        $installContentZh = $referenceContentZh
         $description = ([string]$resource.description).Trim().TrimEnd($fullStop)
-        $summaryZh = $blueprintSummaryTemplate -f $description
+        $summaryZh = $referenceSummaryTemplate -f $description
     }
 
-    $roadmap = $roadmapLookup[$resourceId]
     $record = [ordered]@{
         schemaVersion = 1
         resourceId = $resourceId
@@ -152,7 +146,6 @@ foreach ($resource in ($resources | Sort-Object -Property id)) {
         upgradeCommand = "a3s upgrade use/$packageId"
         uninstallCommand = "a3s uninstall use/$packageId"
         sourceUrl = [string]$resource.url
-        roadmapUrl = if ($null -ne $roadmap) { [string]$roadmap.url } else { $null }
         publishedAt = [string]$manifest.snapshotDate
     }
     $lines.Add(($record | ConvertTo-Json -Depth 8 -Compress))

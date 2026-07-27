@@ -23,7 +23,7 @@ if ([string]::IsNullOrWhiteSpace($RoadmapsPath)) {
     $RoadmapsPath = Join-Path $PSScriptRoot "..\roadmaps"
 }
 if ([string]::IsNullOrWhiteSpace($OutputPath)) {
-    $OutputPath = Join-Path $PSScriptRoot "..\site\data\roadmaps.jsonl"
+    $OutputPath = Join-Path $PSScriptRoot "..\roadmaps\index.jsonl"
 }
 
 $utf8WithoutBom = New-Object System.Text.UTF8Encoding($false)

@@ -17,21 +17,21 @@
   };
 
   const TYPE_LABELS = {
-    root: "图谱根节点",
+    root: "资源目录",
     group: "学科门类",
-    discipline: "研究学科",
-    capabilityHub: "科研能力轴",
-    capability: "科研能力",
-    knowledgeHub: "知识主题轴",
-    topic: "知识主题"
+    discipline: "学科",
+    capabilityHub: "用途分类",
+    capability: "用途",
+    knowledgeHub: "主题分类",
+    topic: "主题"
   };
 
   const KIND_LABELS = {
-    Skill: "科研技能",
+    Skill: "Skill",
     MCP: "MCP 服务",
     Software: "科研软件",
-    Agent: "科研智能体",
-    Workbench: "科研工作台"
+    Agent: "智能体",
+    Workbench: "工作台"
   };
 
   const TOPIC_LABELS = {
@@ -129,14 +129,26 @@
     const overview = all.filter(resource =>
       resource.featured || resource.origin === "native"
     );
-    const representedProfiles = new Set();
+    const representedDisciplines = new Set(
+      overview.flatMap(resource => normalizeArray(resource.disciplines))
+    );
+    const representedSourceCategories = new Set(
+      overview.map(resource => resource.sourceCategory).filter(Boolean)
+    );
     for (const resource of all) {
-      if (
-        resource.roadmap &&
-        !representedProfiles.has(resource.roadmap.profileId)
-      ) {
+      const addsDiscipline = normalizeArray(resource.disciplines)
+        .some(discipline => !representedDisciplines.has(discipline));
+      const addsSourceCategory = Boolean(
+        resource.sourceCategory &&
+        !representedSourceCategories.has(resource.sourceCategory)
+      );
+      if (addsDiscipline || addsSourceCategory) {
         overview.push(resource);
-        representedProfiles.add(resource.roadmap.profileId);
+        normalizeArray(resource.disciplines)
+          .forEach(discipline => representedDisciplines.add(discipline));
+        if (resource.sourceCategory) {
+          representedSourceCategories.add(resource.sourceCategory);
+        }
       }
     }
     return [...new Map(overview.map(resource => [resource.id, resource])).values()];
@@ -175,11 +187,11 @@
 
     addNode({
       id: "atlas:root",
-      label: "A3S 科研套件",
+      label: "A3S 科研资源",
       labelEn: "A3S Science Registry",
       type: "root",
       val: 32,
-      description: "连接学科、科研能力、知识主题与可安装套件的统一索引。"
+      description: "科研软件、Skill、MCP 服务、智能体和工作台的分类目录。"
     });
 
     const groups = new Map();
@@ -211,7 +223,7 @@
 
     addNode({
       id: "axis:capabilities",
-      label: "科研能力",
+      label: "用途",
       labelEn: "Research Capabilities",
       type: "capabilityHub",
       val: 20
@@ -234,8 +246,8 @@
     const topicIds = new Map();
     addNode({
       id: "axis:knowledge",
-      label: "科研知识",
-      labelEn: "Research Knowledge",
+      label: "主题",
+      labelEn: "Topics",
       type: "knowledgeHub",
       val: 18
     });
@@ -481,22 +493,37 @@
       .map(entry => `${entry.nameZh} / ${entry.name}`);
   }
 
+  function resourceDescription(resource) {
+    if (resource.origin === "sciencesoftware" || resource.language?.toLocaleLowerCase().startsWith("zh")) {
+      return resource.description;
+    }
+    return [
+      KIND_LABELS[resource.kind],
+      taxonomyLabels(resource.disciplines, state.taxonomy.disciplines)
+        .slice(0, 2)
+        .map(label => label.split(" / ")[0])
+        .join("、"),
+      taxonomyLabels(resource.capabilities, state.taxonomy.capabilities)
+        .slice(0, 2)
+        .map(label => label.split(" / ")[0])
+        .join("、")
+    ].filter(Boolean).join(" · ");
+  }
+
   function renderInspector(node) {
     if (!node) {
       elements.inspector.innerHTML = `
         <div class="inspector-empty">
-          <span class="inspector-index">节点详情</span>
-          <div class="inspector-symbol" aria-hidden="true">⌁</div>
-          <h3>选择任意节点</h3>
-          <p>点击球体或使用搜索，即可查看学科、科研能力、关联节点、来源、安装命令与现代化路线图。</p>
+          <span class="inspector-index">节点信息</span>
+          <h3>请选择一个节点</h3>
+          <p>这里显示名称、分类和关联节点。资源节点可打开详情页。</p>
         </div>`;
       return;
     }
 
     const resource = node.resource;
     const typeLabel = resource ? KIND_LABELS[resource.kind] : TYPE_LABELS[node.type] || node.type;
-    const description = resource?.package?.summaryZh || node.description ||
-      `A3S 科研知识图谱中的${typeLabel}节点。`;
+    const description = resource ? resourceDescription(resource) : node.description || typeLabel;
     const labels = resource
       ? [
           ...taxonomyLabels(resource.disciplines, state.taxonomy.disciplines),
@@ -511,38 +538,24 @@
       .slice(0, 8);
     const actions = resource ? `
       <div class="inspector-actions">
-        <button class="button button-primary button-small" type="button" data-inspect-resource="${escapeHtml(resource.id)}">查看套件详情</button>
-        <a class="button button-secondary button-small" href="${escapeHtml(resource.url)}" target="_blank" rel="noreferrer">原始项目 <span aria-hidden="true">↗</span></a>
-        ${resource.roadmap ? `<a class="button button-secondary button-small" href="${escapeHtml(resource.roadmap.url)}" target="_blank" rel="noreferrer">研发路线图 <span aria-hidden="true">↗</span></a>` : ""}
-      </div>` : "";
-    const packageBlock = resource?.package ? `
-      <div class="inspector-package">
-        <span>${escapeHtml(resource.package.packageRoleZh)} · v${escapeHtml(resource.package.version)}</span>
-        <div class="inspector-command">
-          <code>${escapeHtml(resource.package.installCommand)}</code>
-          <button type="button" data-copy-command="${escapeHtml(resource.package.installCommand)}">复制</button>
-        </div>
+        <a class="button button-primary button-small" href="./resources/${encodeURIComponent(resource.id)}/">打开详情页</a>
       </div>` : "";
 
     elements.inspector.innerHTML = `
-      <span class="inspector-kicker">关联节点 / ${String(node.degree).padStart(3, "0")}</span>
+      <span class="inspector-kicker">关联节点 ${String(node.degree).padStart(3, "0")}</span>
       <span class="inspector-type">${escapeHtml(typeLabel)}</span>
       <h3>${escapeHtml(node.label)}</h3>
       ${node.labelEn ? `<p class="inspector-en">${escapeHtml(node.labelEn)}</p>` : ""}
       <p>${escapeHtml(description)}</p>
       ${labels.length ? `<div class="inspector-list">${labels.slice(0, 7).map(label => `<span>${escapeHtml(label)}</span>`).join("")}</div>` : ""}
-      ${packageBlock}
       ${actions}
       <div class="inspector-neighbors">
-        <strong>关联节点 / ${neighborIds.length}</strong>
+        <strong>关联节点 ${neighborIds.length}</strong>
         ${neighborNodes.map(neighbor => `<button type="button" data-neighbor-id="${escapeHtml(neighbor.id)}">${escapeHtml(neighbor.label)}</button>`).join("")}
       </div>`;
 
     elements.inspector.querySelectorAll("[data-neighbor-id]").forEach(button => {
       button.addEventListener("click", () => selectNode(button.dataset.neighborId, true));
-    });
-    elements.inspector.querySelector("[data-inspect-resource]")?.addEventListener("click", event => {
-      window.A3SApp?.openResource(event.currentTarget.dataset.inspectResource);
     });
   }
 

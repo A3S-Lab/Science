@@ -53,7 +53,7 @@ delivery boundary:
 | Native workflow | The A3S-native `SKILL.md` plus its lightweight adjacent scripts, references, and workflow assets |
 | MCP entry | A managed knowledge card, interface contract, and canonical service-runtime entry point |
 | Ecosystem adapter | A curated upstream knowledge card, integration contract, and canonical source link |
-| Modernization blueprint | A knowledge card and independent cross-platform successor roadmap; no proprietary vendor binary |
+| Catalog reference | Directory metadata, classification, and a canonical source link; no upstream software binary |
 
 Native assets larger than 16 MiB are not duplicated into registry archives.
 The canonical source remains the download location for large datasets, model
@@ -94,7 +94,7 @@ cargo run --manifest-path tools/registry-builder/Cargo.toml `
   --catalog site/data/packages.jsonl `
   --output site/registry `
   --key-file .registry-signing-key `
-  --metadata-version 1 `
+  --metadata-version 2 `
   --expires 2030-01-01T00:00:00Z
 
 powershell -ExecutionPolicy Bypass -File scripts/serve-site.ps1

@@ -81,4 +81,4 @@ powershell -ExecutionPolicy Bypass -File scripts/validate-site-data.ps1
 ```
 
 The generator writes all `roadmaps/<resource-id>/ROADMAP.md` files,
-`roadmaps/README.md`, and the site's `roadmaps.jsonl` mapping.
+`roadmaps/README.md`, and the internal `roadmaps/index.jsonl` mapping.

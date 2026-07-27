@@ -5,8 +5,7 @@ for A3S.
 
 [Explore the live Science Atlas](https://a3s-lab.github.io/Science/) ·
 [Browse the catalog data](site/data/) ·
-[Use the Science package registry](docs/package-registry.md) ·
-[Open modernization roadmaps](roadmaps/)
+[Use the Science package registry](docs/package-registry.md)
 
 ## Science Atlas
 
@@ -19,18 +18,20 @@ research map. Its interactive 3D graph connects:
   modeling and simulation, visualization, reproducibility, and agentic
   workflows;
 - native and curated software, Skills, MCP servers, agents, and workbenches;
-- knowledge topics derived from resource metadata;
-- an individual cross-platform modernization roadmap for every retained
-  ScienceSoftware entry.
+- knowledge topics derived from resource metadata.
+
+All 472 catalog entries have permanent detail pages with their description,
+bilingual classification, source, related resources, and A3S lifecycle
+commands.
 
 The graph uses the interaction and performance principles of the A3S Web memory
 graph: a cohesive bounded subgraph, searchable nodes, selected-neighbor
 highlighting, camera focus, a rendering cap, reduced-motion support, and an
 always-available accessible list.
 
-The Chinese application shell follows the A3S Office design system: the same
-panel hierarchy, compact controls, sidebar workspace navigation, typography,
-color tokens, responsive drawer behavior, and light/dark themes.
+The Chinese application shell follows the A3S Web interface: the same sidebar
+proportions, panel hierarchy, control sizing, typography, color tokens,
+responsive drawer behavior, and light/dark themes.
 
 ## Package registry
 
@@ -46,9 +47,10 @@ a3s uninstall use/a3s/native-autodock
 The GitHub Pages deployment also hosts a TUF-signed registry. It can be enrolled
 with the public bootstrap-root digest shown on the website. Native Skill
 packages include their lightweight scripts and references. MCP and ecosystem
-packages install managed entry contracts; ScienceSoftware packages install the
-knowledge card and independent modernization blueprint, never a proprietary
-vendor binary. See the [package registry contract](docs/package-registry.md).
+packages install managed entry contracts; ScienceSoftware packages retain
+directory metadata, classification, and the canonical source link, never an
+upstream software binary. See the
+[package registry contract](docs/package-registry.md).
 
 ## Catalog snapshot
 
@@ -109,39 +111,24 @@ is the clearly marked A3S extension. The complete canonical table is in
 
 Refer to each directory for its installation, runtime, and license requirements.
 
-## Modernization roadmaps
-
-Every one of the 340 retained ScienceSoftware records has its own
-`roadmaps/<resource-id>/ROADMAP.md`. Each plan is generated from a tailored
-research architecture archetype and includes:
-
-- the original research intent and bilingual classification;
-- a browser/PWA, Windows, macOS, and Linux platform contract;
-- headless CLI, notebook, container, HPC, Skill, and MCP interfaces;
-- open formats, provenance, deterministic migration, and validation;
-- evidence, MVP, beta, and stable 1.0 phases;
-- verification, initial issues, risks, and clean-room non-goals.
-
-These are independent product proposals, not claims about a vendor's current
-platform support and not statements of affiliation. See the
-[modernization program](docs/modernization-program.md).
-
 ## Data layout
 
 ```text
-site/data/
-├── catalog-manifest.json     # snapshot counts and source provenance
-├── taxonomy.json             # canonical bilingual field and capability names
-├── native.jsonl              # A3S-native Skills and MCP resources
-├── ecosystem.jsonl           # Awesome AI for Science selections
-├── sciencesoftware.jsonl     # filtered ScienceSoftware directory metadata
-├── roadmaps.jsonl            # resource-to-roadmap mapping
-└── packages.jsonl            # one A3S lifecycle contract per resource
-
-site/registry/
-├── index.json                # registry identity and public enrollment command
-├── metadata/                 # TUF root, timestamp, snapshot, and targets roles
-└── targets/                  # 472 portable extension archives
+site/
+├── data/
+│   ├── catalog-manifest.json # snapshot counts and source provenance
+│   ├── taxonomy.json         # canonical bilingual field and capability names
+│   ├── native.jsonl          # A3S-native Skills and MCP resources
+│   ├── ecosystem.jsonl       # Awesome AI for Science selections
+│   ├── sciencesoftware.jsonl # filtered ScienceSoftware directory metadata
+│   └── packages.jsonl        # one A3S lifecycle contract per resource
+├── resources/
+│   └── <resource-id>/        # one permanent detail page per resource
+├── registry/
+│   ├── index.json            # registry identity and public enrollment command
+│   ├── metadata/             # TUF root, timestamp, snapshot, and targets roles
+│   └── targets/              # 472 portable extension archives
+└── sitemap.xml               # homepage plus all resource detail URLs
 ```
 
 Every resource has the same core fields:
@@ -173,11 +160,11 @@ Run commands from this repository, not the parent monorepo:
 # Refresh the filtered ScienceSoftware snapshot.
 powershell -ExecutionPolicy Bypass -File scripts/sync-sciencesoftware.ps1
 
-# Regenerate all per-resource modernization plans and their site mapping.
-powershell -ExecutionPolicy Bypass -File scripts/generate-modernization-roadmaps.ps1
-
 # Regenerate all package identities and lifecycle commands.
 powershell -ExecutionPolicy Bypass -File scripts/generate-package-index.ps1
+
+# Regenerate all permanent resource detail pages and the sitemap.
+powershell -ExecutionPolicy Bypass -File scripts/generate-resource-pages.ps1
 
 # Rebuild the signed registry with the offline local signing key.
 cargo run --manifest-path tools/registry-builder/Cargo.toml `
@@ -185,10 +172,10 @@ cargo run --manifest-path tools/registry-builder/Cargo.toml `
   --catalog site/data/packages.jsonl `
   --output site/registry `
   --key-file .registry-signing-key `
-  --metadata-version 1 `
+  --metadata-version 2 `
   --expires 2030-01-01T00:00:00Z
 
-# Validate taxonomy IDs, source counts, arrays, URLs, filters, roadmaps, assets,
+# Validate taxonomy IDs, source counts, URLs, filters, permanent pages,
 # package coverage, registry artifacts, and the vendored graph dependency.
 powershell -ExecutionPolicy Bypass -File scripts/validate-site-data.ps1
 

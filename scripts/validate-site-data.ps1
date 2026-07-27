@@ -65,7 +65,7 @@ $profileConfiguration = Get-Content -LiteralPath (Join-Path $repositoryRoot "con
 $native = Read-JsonLines (Join-Path $dataPath "native.jsonl")
 $ecosystem = Read-JsonLines (Join-Path $dataPath "ecosystem.jsonl")
 $scienceSoftware = Read-JsonLines (Join-Path $dataPath "sciencesoftware.jsonl")
-$roadmapRecords = Read-JsonLines (Join-Path $dataPath "roadmaps.jsonl")
+$roadmapRecords = Read-JsonLines (Join-Path $roadmapsPath "index.jsonl")
 $packages = Read-JsonLines (Join-Path $dataPath "packages.jsonl")
 $resources = @($native) + @($ecosystem) + @($scienceSoftware)
 
@@ -73,7 +73,7 @@ Assert-Condition ($native.Count -eq [int]$manifest.sources.native.included) "Nat
 Assert-Condition ($ecosystem.Count -eq [int]$manifest.sources.ecosystem.included) "Ecosystem resource count does not match the manifest."
 Assert-Condition ($scienceSoftware.Count -eq [int]$manifest.sources.sciencesoftware.included) "ScienceSoftware resource count does not match the manifest."
 Assert-Condition ($resources.Count -eq [int]$manifest.totalResources) "Total resource count does not match the manifest."
-Assert-Condition ($roadmapRecords.Count -eq [int]$manifest.roadmaps.count) "Roadmap mapping count does not match the manifest."
+Assert-Condition ($roadmapRecords.Count -eq $scienceSoftware.Count) "Internal roadmap mapping count does not match the retained ScienceSoftware catalog."
 Assert-Condition ($packages.Count -eq [int]$manifest.packages.count) "Package count does not match the manifest."
 Assert-Condition ($packages.Count -eq $resources.Count) "Every resource must have exactly one A3S Science package."
 
@@ -155,11 +155,13 @@ foreach ($package in $packages) {
     Assert-Condition (-not [string]::IsNullOrWhiteSpace([string]$package.summaryZh)) "Package '$resourceId' has no Chinese summary."
     Assert-Condition (-not [string]::IsNullOrWhiteSpace([string]$package.installContentZh)) "Package '$resourceId' does not explain its installation content."
     Assert-Condition (Test-HttpsUrl $package.sourceUrl) "Package '$resourceId' must retain an HTTPS source URL."
+    Assert-Condition ($package.PSObject.Properties.Name -notcontains "roadmapUrl") "Package '$resourceId' exposes an internal engineering roadmap."
+    Assert-Condition (([string]$package.summaryZh + [string]$package.installContentZh) -notmatch "\u7814\u53d1\u84dd\u56fe|\u7814\u53d1\u8ba1\u5212|\u8def\u7ebf\u56fe|roadmap") "Package '$resourceId' promotes internal engineering planning."
 }
 foreach ($resourceId in $resourceIds) {
     Assert-Condition ($packageResourceIds.Contains($resourceId)) "Resource '$resourceId' has no A3S package."
 }
-foreach ($role in @("workflow", "interface", "adapter", "blueprint")) {
+foreach ($role in @("workflow", "interface", "adapter", "reference")) {
     $actualRoleCount = @($packages | Where-Object { $_.packageRole -eq $role }).Count
     Assert-Condition ($actualRoleCount -eq [int]$manifest.packages.roles.$role) "Package role '$role' count does not match the manifest."
 }
@@ -191,7 +193,7 @@ foreach ($category in @($filter.sourceCategories)) {
 }
 
 $profileIds = @($profileConfiguration.profiles | ForEach-Object { [string]$_.id })
-Assert-Condition (($profileIds | Select-Object -Unique).Count -eq [int]$manifest.roadmaps.profileCount) "Modernization profile count does not match the manifest."
+Assert-Condition (($profileIds | Select-Object -Unique).Count -eq $profileIds.Count) "Modernization profile configuration contains duplicate identifiers."
 $roadmapResourceIds = [System.Collections.Generic.HashSet[string]]::new()
 foreach ($record in $roadmapRecords) {
     $resourceId = [string]$record.resourceId
@@ -206,7 +208,7 @@ foreach ($record in $roadmapRecords) {
     Assert-Condition ($roadmapContent -match "Windows, macOS, and Linux") "Roadmap '$resourceId' has no cross-platform contract."
     Assert-Condition ($roadmapContent -match "MCP") "Roadmap '$resourceId' has no MCP integration plan."
     Assert-Condition ($roadmapContent -match [regex]::Escape("a3s install use/a3s/$resourceId")) "Roadmap '$resourceId' has no canonical A3S install command."
-    Assert-Condition ($roadmapContent -notmatch "鈥|@\{id=") "Roadmap '$resourceId' contains a template encoding or interpolation error."
+    Assert-Condition ($roadmapContent -notmatch "\u9225|@\{id=") "Roadmap '$resourceId' contains a template encoding or interpolation error."
 }
 foreach ($resource in $scienceSoftware) {
     Assert-Condition ($roadmapResourceIds.Contains([string]$resource.id)) "ScienceSoftware resource '$($resource.id)' has no modernization roadmap."
@@ -259,14 +261,44 @@ Assert-Condition ($artifactFiles.Count -eq $packages.Count) "Registry target dir
 $indexPath = Join-Path $sitePath "index.html"
 $indexContent = Get-Content -LiteralPath $indexPath -Raw -Encoding UTF8
 $appContent = Get-Content -LiteralPath (Join-Path $sitePath "app.js") -Raw -Encoding UTF8
+$graphContent = Get-Content -LiteralPath (Join-Path $sitePath "graph.js") -Raw -Encoding UTF8
+$detailContent = Get-Content -LiteralPath (Join-Path $sitePath "detail.js") -Raw -Encoding UTF8
 Assert-Condition ($indexContent -match '<html lang="zh-CN">') "The website must use Chinese as its primary language."
 Assert-Condition ($appContent -match [regex]::Escape("packages.jsonl")) "The website does not load the A3S package index."
 Assert-Condition ($appContent -match [regex]::Escape("registry/index.json")) "The website does not load the signed registry index."
-foreach ($asset in @("styles.css", "atlas.css", "content.css", "roadmaps.css", "dialogs.css", "responsive.css", "graph.js", "app.js", "vendor/3d-force-graph.min.js")) {
+Assert-Condition ($indexContent -notmatch "resource-dialog") "The homepage must link to permanent detail pages instead of using a resource dialog."
+Assert-Condition (-not (Test-Path -LiteralPath (Join-Path $dataPath "roadmaps.jsonl"))) "Internal engineering roadmap data must not be published with the site."
+$publicInterfaceContent = $indexContent + $appContent + $graphContent + $detailContent
+Assert-Condition ($publicInterfaceContent -notmatch "\u7814\u53d1\u8ba1\u5212|\u8def\u7ebf\u56fe|roadmap|modernization") "Internal engineering roadmaps must not be promoted in the public catalog interface."
+foreach ($asset in @("styles.css", "atlas.css", "content.css", "responsive.css", "graph.js", "app.js", "vendor/3d-force-graph.min.js")) {
     $assetPath = Join-Path $sitePath $asset.Replace("/", [System.IO.Path]::DirectorySeparatorChar)
     Assert-Condition (Test-Path -LiteralPath $assetPath -PathType Leaf) "Site asset '$asset' is missing."
     Assert-Condition ($indexContent -match [regex]::Escape($asset)) "Site index does not reference '$asset'."
 }
+foreach ($asset in @("detail.css", "detail.js")) {
+    Assert-Condition (Test-Path -LiteralPath (Join-Path $sitePath $asset) -PathType Leaf) "Detail-page asset '$asset' is missing."
+}
+
+$resourcePagesPath = Join-Path $sitePath "resources"
+$resourcePageDirectories = @(Get-ChildItem -LiteralPath $resourcePagesPath -Directory)
+Assert-Condition ($resourcePageDirectories.Count -eq $resources.Count) "Resource detail-page count does not match the catalog."
+foreach ($resource in $resources) {
+    $resourceId = [string]$resource.id
+    $resourcePage = Join-Path (Join-Path $resourcePagesPath $resourceId) "index.html"
+    Assert-Condition (Test-Path -LiteralPath $resourcePage -PathType Leaf) "Resource '$resourceId' has no permanent detail page."
+    $resourcePageContent = Get-Content -LiteralPath $resourcePage -Raw -Encoding UTF8
+    Assert-Condition ($resourcePageContent -match '<html lang="zh-CN">') "Detail page '$resourceId' does not use Chinese as its primary language."
+    Assert-Condition ($resourcePageContent -match [regex]::Escape("data-resource-id=`"$resourceId`"")) "Detail page '$resourceId' has an invalid resource identifier."
+    Assert-Condition ($resourcePageContent -match [regex]::Escape("https://a3s-lab.github.io/Science/resources/$resourceId/")) "Detail page '$resourceId' has no canonical URL."
+    Assert-Condition ($resourcePageContent -match [regex]::Escape("../../detail.js")) "Detail page '$resourceId' does not load the shared detail controller."
+    Assert-Condition ($resourcePageContent -notmatch "roadmap-section|\u8de8\u5e73\u53f0\u7814\u53d1\u8ba1\u5212") "Detail page '$resourceId' exposes an internal engineering roadmap."
+}
+
+$sitemapPath = Join-Path $sitePath "sitemap.xml"
+Assert-Condition (Test-Path -LiteralPath $sitemapPath -PathType Leaf) "The resource sitemap is missing."
+$sitemapContent = Get-Content -LiteralPath $sitemapPath -Raw -Encoding UTF8
+$sitemapUrlCount = ([regex]::Matches($sitemapContent, "<url>")).Count
+Assert-Condition ($sitemapUrlCount -eq ($resources.Count + 1)) "The sitemap does not contain the homepage and every resource detail page."
 
 $vendorHash = (Get-FileHash -LiteralPath (Join-Path $sitePath "vendor/3d-force-graph.min.js") -Algorithm SHA256).Hash
 Assert-Condition ($vendorHash -eq "D96E738EDCCA580EDD524730C1C6B05ED2EFCE028C23CA95DB1BF43033A72E42") "Vendored 3d-force-graph hash is unexpected."
@@ -276,6 +308,11 @@ Get-ChildItem -LiteralPath $sitePath -File |
     ForEach-Object {
         $lineCount = (Get-Content -LiteralPath $_.FullName).Count
         Assert-Condition ($lineCount -lt 1000) "Site source '$($_.Name)' has $lineCount lines and must be split."
+        if ($_.Extension -eq ".css") {
+            $stylesheet = Get-Content -LiteralPath $_.FullName -Raw -Encoding UTF8
+            $smallFontPattern = "font(?:-size)?\s*:[^;]*(?<![\d.])(?:[0-9](?:\.\d+)?|1[01](?:\.\d+)?)px"
+            Assert-Condition ($stylesheet -notmatch $smallFontPattern) "Site stylesheet '$($_.Name)' contains text smaller than 12px."
+        }
     }
 
 Write-Host "Validated $($resources.Count) resources, $($packages.Count) signed packages, $($disciplineIds.Count) disciplines, $($capabilityIds.Count) capabilities, and $($roadmapRecords.Count) roadmaps."

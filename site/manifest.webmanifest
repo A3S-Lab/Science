@@ -1,7 +1,7 @@
 {
-  "name": "A3S 科研套件",
-  "short_name": "A3S 科研",
-  "description": "可探索、可安装、可复现的科研软件、Skills、MCP 服务、智能体与知识图谱。",
+  "name": "A3S 科研资源目录",
+  "short_name": "A3S 科研资源",
+  "description": "科研软件、Skill、MCP 服务、智能体和工作台目录。",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#f7f7f8",

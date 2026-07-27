@@ -36,11 +36,6 @@
       ]
     }
   },
-  "roadmaps": {
-    "count": 340,
-    "profileCount": 16,
-    "status": "Independent clean-room successor proposals"
-  },
   "packages": {
     "count": 472,
     "registryUrl": "https://a3s-lab.github.io/Science/registry/",
@@ -53,7 +48,7 @@
       "workflow": 35,
       "interface": 25,
       "adapter": 72,
-      "blueprint": 340
+      "reference": 340
     }
   }
 }

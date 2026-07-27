@@ -1,18 +1,18 @@
 @media (max-width: 1240px) {
-  .metric-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .discipline-groups {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
   .catalog-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .atlas-body {
     grid-template-columns: minmax(0, 1fr) 280px;
+  }
+
+  .directory-search-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .directory-summary {
+    justify-content: flex-start;
   }
 }
 
@@ -23,15 +23,6 @@
 
   .workspace {
     padding-inline: 22px;
-  }
-
-  .registry-steps {
-    grid-template-columns: 1fr;
-  }
-
-  .registry-steps article + article {
-    border-top: 1px solid var(--a3s-line);
-    border-left: 0;
   }
 
   .atlas-toolbar {
@@ -53,16 +44,16 @@
 
   .graph-inspector {
     height: auto;
-    min-height: 230px;
+    min-height: 220px;
     border-top: 1px solid var(--a3s-line);
     border-left: 0;
   }
 
   .inspector-empty {
-    min-height: 200px;
+    min-height: 190px;
   }
 
-  .source-cards {
+  .registry-setup-body {
     grid-template-columns: 1fr;
   }
 }
@@ -118,25 +109,8 @@
     padding-left: 56px;
   }
 
-  .workspace-search-panel {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .discipline-groups {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .filter-panel {
     grid-template-columns: 1fr 1fr;
-  }
-
-  .roadmap-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .roadmap-score {
-    min-height: 160px;
   }
 }
 
@@ -155,41 +129,28 @@
     padding-left: 0;
   }
 
-  .metric-grid,
-  .catalog-grid,
-  .discipline-groups,
-  .roadmap-principles {
-    grid-template-columns: 1fr;
+  .directory-search-panel {
+    padding: 10px;
   }
 
-  .registry-heading {
-    grid-template-columns: 40px 1fr;
+  .directory-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
   }
 
-  .registry-logo {
-    width: 40px;
-    height: 40px;
-  }
-
-  .status-pill {
-    grid-column: 1 / -1;
-    justify-self: start;
-  }
-
-  .registry-steps article {
-    padding-inline: 14px;
-  }
-
-  .command-field code {
-    font-size: 8px;
+  .directory-summary span {
+    display: grid;
+    padding: 6px;
+    text-align: center;
+    white-space: normal;
   }
 
   .section-header {
     display: grid;
   }
 
-  .section-meta,
-  .section-header > .button {
+  .section-meta {
     justify-self: start;
   }
 
@@ -232,11 +193,20 @@
     left: 10px;
   }
 
-  .catalog-search-row {
-    grid-template-columns: 1fr;
+  .atlas-legend {
+    gap: 9px;
   }
 
-  .filter-panel {
+  .catalog-toolbar {
+    display: grid;
+  }
+
+  .filter-toggle {
+    justify-self: start;
+  }
+
+  .filter-panel,
+  .catalog-grid {
     grid-template-columns: 1fr;
   }
 
@@ -245,16 +215,7 @@
   }
 
   .resource-card {
-    min-height: 268px;
-  }
-
-  .roadmap-section {
-    margin-inline: -4px;
-    padding: 20px 16px;
-  }
-
-  .source-cards a {
-    grid-template-columns: 38px 1fr auto;
+    min-height: 190px;
   }
 
   .workspace-footer {
@@ -262,26 +223,15 @@
     justify-items: start;
     gap: 4px;
   }
-
-  #resource-dialog-content {
-    padding: 22px 17px;
-  }
-
-  .dialog-command-row {
-    grid-template-columns: 45px minmax(0, 1fr) auto;
-  }
 }
 
 @media (max-width: 390px) {
-  .page-actions {
-    grid-template-columns: 1fr;
-  }
-
+  .page-actions,
   .graph-list {
     grid-template-columns: 1fr;
   }
 
-  .atlas-legend {
-    gap: 9px;
+  .directory-summary {
+    grid-template-columns: 1fr;
   }
 }

@@ -48,7 +48,6 @@ struct PackageRecord {
     upgrade_command: String,
     uninstall_command: String,
     source_url: String,
-    roadmap_url: Option<String>,
 }
 
 #[derive(Serialize)]
@@ -533,21 +532,16 @@ fn skill_document(package: &PackageRecord) -> String {
         "interface" => {
             "This package installs an MCP knowledge card and interface contract. Prepare the service runtime according to the canonical source requirements."
         }
-        "blueprint" => {
-            "This package installs a knowledge card and clean-room modernization blueprint. It does not contain or license the original commercial binary."
+        "reference" => {
+            "This package installs catalog metadata, classification, and a canonical source link. It does not contain or license the original software binary."
         }
         _ => {
             "This package installs a curated upstream knowledge card and integration contract. Verify upstream requirements before execution."
         }
     };
-    let roadmap = package
-        .roadmap_url
-        .as_deref()
-        .map(|url| format!("\n- Modernization roadmap: {url}"))
-        .unwrap_or_default();
     format!(
         "---\nname: a3s-science-{}\ndescription: Managed A3S Science catalog package for {}.\n---\n\n\
-         # {}\n\n{}\n\n## Package contract\n\n- Kind: {}\n- Origin: {}\n- Source: {}{}\n\
+         # {}\n\n{}\n\n## Package contract\n\n- Kind: {}\n- Origin: {}\n- Source: {}\n\
          - Install: `{}`\n- Upgrade: `{}`\n- Uninstall: `{}`\n\n## Safe use\n\n\
          1. Review the canonical source, license, data policy, and platform requirements.\n\
          2. Treat this package as a reproducible A3S entry point, not as an endorsement of scientific conclusions.\n\
@@ -560,7 +554,6 @@ fn skill_document(package: &PackageRecord) -> String {
         package.kind,
         package.origin,
         package.source_url,
-        roadmap,
         package.install_command,
         package.upgrade_command,
         package.uninstall_command
