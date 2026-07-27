@@ -1,75 +1,37 @@
-@media (max-width: 1100px) {
-  .hero {
-    grid-template-columns: 1fr 420px;
-    gap: 50px;
+@media (max-width: 1240px) {
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .main-nav {
-    display: none;
+  .discipline-groups {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .site-header {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .atlas-body {
-    grid-template-columns: minmax(0, 1fr) 290px;
-  }
-
-  .discipline-groups,
   .catalog-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .stack-flow {
-    grid-template-columns: 1fr 26px 1fr;
-    gap: 0;
-  }
-
-  .stack-flow article:nth-of-type(3) {
-    margin-top: 26px;
-  }
-
-  .stack-flow article:nth-of-type(3)::before {
-    position: absolute;
-    top: -27px;
-    left: -27px;
-    width: calc(200% + 53px);
-    border-top: 1px solid var(--dark-line);
-    content: "";
-  }
-
-  .stack-link:nth-of-type(2) {
-    display: none;
-  }
-
-  .roadmap-layout {
-    gap: 60px;
-  }
-
-  .roadmap-principles {
-    grid-template-columns: repeat(2, 1fr);
+  .atlas-body {
+    grid-template-columns: minmax(0, 1fr) 280px;
   }
 }
 
-@media (max-width: 820px) {
-  .section-shell {
-    width: min(100% - 32px, 680px);
+@media (max-width: 980px) {
+  :root {
+    --sidebar-width: 224px;
   }
 
-  .hero {
+  .workspace {
+    padding-inline: 22px;
+  }
+
+  .registry-steps {
     grid-template-columns: 1fr;
-    min-height: auto;
-    padding-top: 145px;
   }
 
-  .hero-instrument {
-    min-height: 590px;
-  }
-
-  .section-heading {
-    grid-template-columns: 1fr;
-    gap: 28px;
+  .registry-steps article + article {
+    border-top: 1px solid var(--a3s-line);
+    border-left: 0;
   }
 
   .atlas-toolbar {
@@ -86,29 +48,87 @@
 
   .graph-stage,
   .graph-list-panel {
-    min-height: 590px;
-    border-right: 0;
-    border-bottom: 1px solid var(--dark-line);
+    height: 560px;
   }
 
   .graph-inspector {
-    min-height: 300px;
+    height: auto;
+    min-height: 230px;
+    border-top: 1px solid var(--a3s-line);
+    border-left: 0;
   }
 
   .inspector-empty {
-    min-height: 250px;
+    min-height: 200px;
   }
 
-  .stack-flow {
-    grid-template-columns: 1fr 20px 1fr;
+  .source-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 839px) {
+  .site-sidebar {
+    width: min(292px, calc(100vw - 42px));
+    box-shadow: var(--a3s-shadow);
+    transform: translateX(-104%);
+    transition: transform 180ms ease;
+  }
+
+  body.is-sidebar-open .site-sidebar {
+    transform: translateX(0);
+  }
+
+  .sidebar-close,
+  .mobile-menu {
+    display: grid;
+    place-items: center;
+  }
+
+  .app-shell {
+    margin-left: 0;
+  }
+
+  .app-topbar {
+    padding-inline: 16px;
+  }
+
+  .breadcrumbs {
+    margin-right: auto;
+    margin-left: 10px;
+  }
+
+  .registry-status {
+    display: none;
+  }
+
+  .workspace {
+    padding: 22px 16px 0;
+  }
+
+  .workspace-section {
+    padding-top: 36px;
+  }
+
+  .page-header {
+    display: grid;
+  }
+
+  .page-actions {
+    padding-left: 56px;
+  }
+
+  .workspace-search-panel {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .discipline-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .filter-panel {
     grid-template-columns: 1fr 1fr;
-  }
-
-  .filter-panel.is-open {
-    max-height: 300px;
   }
 
   .roadmap-layout {
@@ -116,100 +136,145 @@
   }
 
   .roadmap-score {
-    justify-content: space-between;
-  }
-
-  .sources-section {
-    grid-template-columns: 1fr;
-  }
-
-  .source-note {
-    grid-column: 1;
-    margin-top: -45px;
-  }
-
-  .footer-grid {
-    grid-template-columns: 1.5fr 1fr 1fr;
-  }
-
-  .footer-status {
-    grid-column: 1 / -1;
-    align-items: flex-start;
-    text-align: left;
+    min-height: 160px;
   }
 }
 
-@media (max-width: 580px) {
-  .site-header {
-    top: 8px;
-    width: calc(100% - 16px);
-  }
-
-  .header-actions .button {
+@media (max-width: 620px) {
+  .topbar-actions .button {
     display: none;
   }
 
-  .hero h1 {
-    font-size: clamp(58px, 20vw, 82px);
+  .page-header h1 {
+    font-size: 23px;
   }
 
-  .hero-instrument {
-    min-width: 0;
-    min-height: 530px;
-    padding: 16px;
-    border-radius: 24px;
+  .page-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-left: 0;
   }
 
-  .instrument-orbit {
-    margin-top: 8px;
+  .metric-grid,
+  .catalog-grid,
+  .discipline-groups,
+  .roadmap-principles {
+    grid-template-columns: 1fr;
   }
 
-  .signal-track {
-    justify-content: flex-start;
-    padding-inline: 20px;
+  .registry-heading {
+    grid-template-columns: 40px 1fr;
   }
 
-  .atlas-section,
-  .stack-section,
-  .disciplines-section,
-  .catalog-section,
-  .sources-section,
-  .roadmap-section {
-    padding-top: 92px;
-    padding-bottom: 92px;
+  .registry-logo {
+    width: 40px;
+    height: 40px;
   }
 
-  .atlas-section > .section-shell {
-    width: 100%;
+  .status-pill {
+    grid-column: 1 / -1;
+    justify-self: start;
   }
 
-  .atlas-section .section-heading,
-  .atlas-section > .section-shell > .eyebrow {
-    width: calc(100% - 32px);
-    margin-inline: auto;
+  .registry-steps article {
+    padding-inline: 14px;
   }
 
-  .atlas-frame {
-    border-right: 0;
-    border-left: 0;
-    border-radius: 0;
+  .command-field code {
+    font-size: 8px;
+  }
+
+  .section-header {
+    display: grid;
+  }
+
+  .section-meta,
+  .section-header > .button {
+    justify-self: start;
+  }
+
+  .atlas-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .graph-search {
+    grid-column: auto;
   }
 
   .compact-select {
-    min-width: 0;
+    width: 100%;
   }
 
-  .compact-select > span {
-    display: none;
+  .compact-select select {
+    flex: 1;
+  }
+
+  .segmented-control {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 
   .graph-stage,
   .graph-list-panel {
-    min-height: 520px;
+    height: 500px;
+  }
+
+  .graph-list {
+    grid-template-columns: 1fr 1fr;
   }
 
   .graph-hint {
     display: none;
+  }
+
+  .graph-controls {
+    top: 10px;
+    left: 10px;
+  }
+
+  .catalog-search-row {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-meta {
+    display: grid;
+  }
+
+  .resource-card {
+    min-height: 268px;
+  }
+
+  .roadmap-section {
+    margin-inline: -4px;
+    padding: 20px 16px;
+  }
+
+  .source-cards a {
+    grid-template-columns: 38px 1fr auto;
+  }
+
+  .workspace-footer {
+    display: grid;
+    justify-items: start;
+    gap: 4px;
+  }
+
+  #resource-dialog-content {
+    padding: 22px 17px;
+  }
+
+  .dialog-command-row {
+    grid-template-columns: 45px minmax(0, 1fr) auto;
+  }
+}
+
+@media (max-width: 390px) {
+  .page-actions {
+    grid-template-columns: 1fr;
   }
 
   .graph-list {
@@ -217,115 +282,6 @@
   }
 
   .atlas-legend {
-    gap: 12px;
-  }
-
-  .discipline-groups,
-  .catalog-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .discipline-card {
-    min-height: 240px;
-  }
-
-  .stack-flow {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .stack-link {
-    display: none;
-  }
-
-  .stack-flow article:nth-of-type(3) {
-    margin-top: 0;
-  }
-
-  .stack-flow article:nth-of-type(3)::before {
-    display: none;
-  }
-
-  .catalog-search-row {
-    align-items: stretch;
-  }
-
-  .filter-toggle {
-    padding-inline: 13px;
-  }
-
-  .filter-panel {
-    grid-template-columns: 1fr;
-  }
-
-  .filter-panel.is-open {
-    max-height: 430px;
-  }
-
-  .catalog-meta {
-    display: block;
-  }
-
-  .catalog-meta p + p {
-    margin-top: 5px;
-  }
-
-  .resource-card {
-    min-height: 320px;
-  }
-
-  .roadmap-score {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .score-ring {
-    width: 200px;
-    height: 200px;
-  }
-
-  .roadmap-score dl {
-    width: 100%;
-  }
-
-  .roadmap-principles {
-    grid-template-columns: 1fr;
-  }
-
-  .source-cards a {
-    grid-template-columns: 54px 1fr auto;
-  }
-
-  .footer-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 36px;
-  }
-
-  .footer-grid > div:first-child {
-    grid-column: 1 / -1;
-  }
-
-  .footer-base {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  #resource-dialog-content {
-    padding: 50px 22px 26px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    gap: 9px;
   }
 }

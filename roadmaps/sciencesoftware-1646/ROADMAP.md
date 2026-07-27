@@ -13,6 +13,15 @@
 
 The product anchor is **西门子综合能源规划仿真软件**. The successor should preserve that research intent while replacing opaque, machine-bound workflows with portable projects, documented interfaces, and reproducible computation.
 
+## A3S package
+
+- **Catalog package:** `@a3s-science/sciencesoftware-1646`
+- **Install:** `a3s install use/a3s/sciencesoftware-1646`
+- **Upgrade:** `a3s upgrade use/a3s/sciencesoftware-1646`
+- **Uninstall:** `a3s uninstall use/a3s/sciencesoftware-1646`
+
+This registry package installs the software knowledge card and this independent modernization blueprint. It does not contain, redistribute, or claim to install the original vendor binary.
+
 ## Product vision
 
 Build an open, solver-verifiable platform for electrical networks, electromagnetic studies, energy planning, and reproducible scenario analysis.

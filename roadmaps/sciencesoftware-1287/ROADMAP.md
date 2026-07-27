@@ -13,6 +13,15 @@
 
 The product anchor is **电路设计软件**. The successor should preserve that research intent while replacing opaque, machine-bound workflows with portable projects, documented interfaces, and reproducible computation.
 
+## A3S package
+
+- **Catalog package:** `@a3s-science/sciencesoftware-1287`
+- **Install:** `a3s install use/a3s/sciencesoftware-1287`
+- **Upgrade:** `a3s upgrade use/a3s/sciencesoftware-1287`
+- **Uninstall:** `a3s uninstall use/a3s/sciencesoftware-1287`
+
+This registry package installs the software knowledge card and this independent modernization blueprint. It does not contain, redistribute, or claim to install the original vendor binary.
+
 ## Product vision
 
 Provide a modular engineering workbench that separates geometry, meshing, physics, solvers, post-processing, and verification into open interfaces.

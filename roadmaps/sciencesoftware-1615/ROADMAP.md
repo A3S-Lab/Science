@@ -13,6 +13,15 @@
 
 The product anchor is **PCR引物设计软件**. The successor should preserve that research intent while replacing opaque, machine-bound workflows with portable projects, documented interfaces, and reproducible computation.
 
+## A3S package
+
+- **Catalog package:** `@a3s-science/sciencesoftware-1615`
+- **Install:** `a3s install use/a3s/sciencesoftware-1615`
+- **Upgrade:** `a3s upgrade use/a3s/sciencesoftware-1615`
+- **Uninstall:** `a3s uninstall use/a3s/sciencesoftware-1615`
+
+This registry package installs the software knowledge card and this independent modernization blueprint. It does not contain, redistribute, or claim to install the original vendor binary.
+
 ## Product vision
 
 Offer portable, workflow-native sequence and omics analysis with explicit references, environments, and provenance from raw data to interpretable results.

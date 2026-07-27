@@ -1,454 +1,414 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Explore scientific software, Skills, MCP servers, agents, and research knowledge across an OECD FORD-aligned 3D atlas.">
-    <meta name="theme-color" content="#07110f">
-    <meta property="og:title" content="A3S Science Atlas">
-    <meta property="og:description" content="A navigable atlas of disciplines, research capabilities, software, Skills, MCP servers, and modernization roadmaps.">
+    <meta name="description" content="探索跨学科科研软件、Skills、MCP 服务、科研智能体、知识与现代化研发路线图，并使用 A3S 包管理器统一安装。">
+    <meta name="theme-color" content="#f7f7f8">
+    <meta property="og:title" content="A3S 科研套件">
+    <meta property="og:description" content="一个可探索、可安装、可复现的科研套件与 3D 学科知识图谱。">
     <meta property="og:type" content="website">
-    <title>A3S Science Atlas — Science, callable.</title>
+    <title>A3S 科研套件｜科学工具与知识图谱</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
     <link rel="manifest" href="./manifest.webmanifest">
     <link rel="stylesheet" href="./styles.css">
     <link rel="stylesheet" href="./atlas.css">
     <link rel="stylesheet" href="./content.css">
     <link rel="stylesheet" href="./roadmaps.css">
+    <link rel="stylesheet" href="./dialogs.css">
     <link rel="stylesheet" href="./responsive.css">
     <script src="./vendor/3d-force-graph.min.js" defer></script>
     <script src="./graph.js" defer></script>
     <script src="./app.js" defer></script>
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main">跳到主要内容</a>
 
-    <header class="site-header" data-header>
-      <a class="brand" href="#top" aria-label="A3S Science Atlas home">
-        <img src="./assets/mark.svg" alt="" width="34" height="34">
-        <span>A3S <b>SCIENCE</b></span>
-      </a>
-      <nav class="main-nav" aria-label="Primary navigation">
-        <a href="#atlas">Atlas</a>
-        <a href="#disciplines">Disciplines</a>
-        <a href="#catalog">Catalog</a>
-        <a href="#roadmaps">Roadmaps</a>
-      </nav>
-      <div class="header-actions">
-        <button class="icon-button theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle color theme">
-          <span aria-hidden="true">◐</span>
-        </button>
-        <a class="button button-small button-quiet" href="https://github.com/A3S-Lab/Science" target="_blank" rel="noreferrer">
-          GitHub <span aria-hidden="true">↗</span>
+    <div class="mobile-scrim" data-sidebar-close hidden></div>
+    <aside class="site-sidebar" id="site-sidebar" aria-label="科研套件导航">
+      <div class="sidebar-product">
+        <a class="product-brand" href="#overview" aria-label="A3S 科研套件首页">
+          <img src="./assets/mark.svg" alt="" width="34" height="34">
+          <span>
+            <strong>A3S 科研套件</strong>
+            <small>SCIENCE</small>
+          </span>
         </a>
+        <button class="sidebar-close" type="button" data-sidebar-close aria-label="关闭导航">×</button>
       </div>
-    </header>
 
-    <main id="main">
-      <section class="hero section-shell" id="top">
-        <div class="hero-copy">
-          <p class="eyebrow"><span class="live-dot"></span> Open research infrastructure</p>
-          <h1>Science,<br><em>callable.</em></h1>
-          <p class="hero-zh">让每一个学科都可探索、可调用、可复现。</p>
-          <p class="hero-lede">
-            One navigable atlas for scientific software, agent Skills, MCP servers,
-            research agents, workbenches, and the knowledge that connects them.
-          </p>
-          <div class="hero-actions">
-            <a class="button button-primary" href="#atlas">Explore the 3D atlas <span aria-hidden="true">↓</span></a>
-            <a class="button button-quiet" href="#catalog">Browse the catalog</a>
-          </div>
-          <div class="hero-provenance">
-            <span>Taxonomy</span>
-            <strong>OECD FORD aligned</strong>
-            <span aria-hidden="true">·</span>
-            <span>Snapshot</span>
-            <strong data-snapshot-date>27 Jul 2026</strong>
-          </div>
+      <div class="workspace-card">
+        <span class="workspace-icon" aria-hidden="true">⌬</span>
+        <span>
+          <small>当前工作区</small>
+          <strong>科研资源总览</strong>
+        </span>
+        <b data-metric="resources">—</b>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="主要导航">
+        <p>工作区</p>
+        <a class="is-active" href="#overview" data-nav-link="overview">
+          <span aria-hidden="true">⌂</span>总览
+        </a>
+        <a href="#atlas" data-nav-link="atlas">
+          <span aria-hidden="true">⌘</span>学科图谱
+        </a>
+        <a href="#disciplines" data-nav-link="disciplines">
+          <span aria-hidden="true">▦</span>学科分类
+        </a>
+        <a href="#catalog" data-nav-link="catalog">
+          <span aria-hidden="true">◇</span>套件市场
+          <b data-metric="packages">—</b>
+        </a>
+        <a href="#roadmaps" data-nav-link="roadmaps">
+          <span aria-hidden="true">↗</span>研发路线图
+        </a>
+
+        <p>快速筛选</p>
+        <button type="button" data-kind-filter="Skill"><i class="nav-dot nav-dot-skill"></i>科研技能</button>
+        <button type="button" data-kind-filter="MCP"><i class="nav-dot nav-dot-mcp"></i>MCP 服务</button>
+        <button type="button" data-kind-filter="Software"><i class="nav-dot nav-dot-software"></i>科研软件</button>
+        <button type="button" data-kind-filter="Agent"><i class="nav-dot nav-dot-agent"></i>科研智能体</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="https://github.com/A3S-Lab/Science" target="_blank" rel="noreferrer">
+          <span aria-hidden="true">⌘</span>GitHub 仓库<span aria-hidden="true">↗</span>
+        </a>
+        <button class="theme-toggle" type="button" aria-label="切换深浅色主题">
+          <span aria-hidden="true">◐</span>外观主题
+        </button>
+      </div>
+    </aside>
+
+    <div class="app-shell">
+      <header class="app-topbar">
+        <button class="mobile-menu" type="button" data-sidebar-open aria-label="打开导航">☰</button>
+        <div class="breadcrumbs">
+          <span>A3S</span><i>/</i><strong>科研套件</strong>
         </div>
-
-        <aside class="hero-instrument" aria-label="Catalog snapshot">
-          <div class="instrument-topline">
-            <span>ATLAS INDEX</span>
-            <span class="instrument-status">SYNCED</span>
-          </div>
-          <div class="instrument-orbit" aria-hidden="true">
-            <div class="orbit orbit-one"></div>
-            <div class="orbit orbit-two"></div>
-            <div class="orbit orbit-three"></div>
-            <div class="orbit-core">A3S</div>
-            <i class="orbit-node node-a"></i>
-            <i class="orbit-node node-b"></i>
-            <i class="orbit-node node-c"></i>
-            <i class="orbit-node node-d"></i>
-          </div>
-          <dl class="metric-grid">
-            <div>
-              <dt data-metric="resources">—</dt>
-              <dd>research resources</dd>
-            </div>
-            <div>
-              <dt data-metric="disciplines">—</dt>
-              <dd>disciplines</dd>
-            </div>
-            <div>
-              <dt data-metric="skills">—</dt>
-              <dd>agent Skills</dd>
-            </div>
-            <div>
-              <dt data-metric="mcp">—</dt>
-              <dd>MCP domains</dd>
-            </div>
-          </dl>
-          <div class="instrument-footer">
-            <span>RESEARCH GRAPH</span>
-            <span>v1.0</span>
-          </div>
-        </aside>
-      </section>
-
-      <section class="signal-strip" aria-label="Research workflow">
-        <div class="signal-track">
-          <span>DISCOVER</span><i></i><span>UNDERSTAND</span><i></i><span>COMPUTE</span><i></i>
-          <span>SIMULATE</span><i></i><span>VALIDATE</span><i></i><span>COMMUNICATE</span><i></i>
-          <span>REPRODUCE</span>
+        <div class="topbar-actions">
+          <span class="registry-status"><i></i>注册表在线</span>
+          <a class="button button-secondary button-small" href="https://github.com/A3S-Lab/Science" target="_blank" rel="noreferrer">查看源码 ↗</a>
         </div>
-      </section>
+      </header>
 
-      <section class="atlas-section" id="atlas">
-        <div class="section-shell">
-          <div class="section-heading section-heading-light">
-            <div>
-              <p class="eyebrow">01 / Knowledge atlas</p>
-              <h2>A living map of<br><em>research capability.</em></h2>
+      <main class="workspace" id="main">
+        <section class="overview-section" id="overview">
+          <div class="page-header">
+            <div class="page-identity">
+              <span class="page-icon" aria-hidden="true">⌬</span>
+              <div>
+                <p class="eyebrow">A3S SCIENCE · 科研基础设施</p>
+                <h1>科研套件工作区</h1>
+                <p>统一发现、理解、安装并连接科研软件、Skills、MCP 服务、智能体与专业知识。</p>
+              </div>
             </div>
-            <p>
-              Fields form the structure. Capabilities form the connective tissue.
-              Tools, Skills, MCP servers, agents, and knowledge topics become the
-              points you can inspect and follow.
-            </p>
+            <div class="page-actions">
+              <a class="button button-primary" href="#catalog">浏览套件市场</a>
+              <a class="button button-secondary" href="#atlas">探索 3D 图谱</a>
+            </div>
           </div>
+
+          <div class="workspace-search-panel">
+            <div class="search-copy">
+              <span class="search-symbol" aria-hidden="true">⌕</span>
+              <div>
+                <strong>搜索全部科研资源</strong>
+                <span>按名称、学科、能力、标签或包名查找</span>
+              </div>
+            </div>
+            <label class="global-search">
+              <span class="sr-only">搜索科研资源</span>
+              <input id="global-search" type="search" placeholder="例如：蛋白质结构、DeepChem、MCP、统计分析…" autocomplete="off">
+              <kbd>/</kbd>
+            </label>
+          </div>
+
+          <div class="metric-grid" aria-label="目录概览">
+            <article>
+              <span class="metric-icon metric-blue" aria-hidden="true">◇</span>
+              <div><strong data-metric="packages">—</strong><span>可安装科研包</span></div>
+              <small>统一 A3S 命令</small>
+            </article>
+            <article>
+              <span class="metric-icon metric-purple" aria-hidden="true">▦</span>
+              <div><strong data-metric="disciplines">—</strong><span>标准学科分类</span></div>
+              <small>OECD FORD 对齐</small>
+            </article>
+            <article>
+              <span class="metric-icon metric-green" aria-hidden="true">⌘</span>
+              <div><strong data-metric="skills">—</strong><span>科研技能</span></div>
+              <small>可复现工作流</small>
+            </article>
+            <article>
+              <span class="metric-icon metric-orange" aria-hidden="true">↗</span>
+              <div><strong data-metric="roadmaps">—</strong><span>现代化路线图</span></div>
+              <small>跨平台研发计划</small>
+            </article>
+          </div>
+
+          <section class="registry-panel" aria-labelledby="registry-title">
+            <div class="registry-heading">
+              <span class="registry-logo" aria-hidden="true">a3s</span>
+              <div>
+                <p class="eyebrow">A3S SCIENCE REGISTRY</p>
+                <h2 id="registry-title">科研套件版的 npm</h2>
+                <p>一个包 ID、一条安装命令、同一套跨平台生命周期。注册表使用 TUF 签名元数据保护包来源与完整性。</p>
+              </div>
+              <span class="status-pill"><i></i><b data-metric="packages">—</b> 个包</span>
+            </div>
+            <div class="registry-steps">
+              <article>
+                <span class="step-number">01</span>
+                <div>
+                  <strong>首次添加科研注册表</strong>
+                  <span>固定公开信任根，只需执行一次</span>
+                </div>
+                <div class="command-field">
+                  <code id="registry-enroll-command">正在读取签名注册表…</code>
+                  <button type="button" data-copy-target="registry-enroll-command" aria-label="复制注册表命令">复制</button>
+                </div>
+              </article>
+              <article>
+                <span class="step-number">02</span>
+                <div>
+                  <strong>安装任意科研套件</strong>
+                  <span>套件卡片与图谱详情均可直接复制</span>
+                </div>
+                <div class="command-field command-field-emphasis">
+                  <code>a3s install use/a3s/native-autodock</code>
+                  <button type="button" data-copy-command="a3s install use/a3s/native-autodock" aria-label="复制示例安装命令">复制</button>
+                </div>
+              </article>
+            </div>
+            <p class="registry-note"><span aria-hidden="true">ⓘ</span>旧商业软件对应的包安装知识卡与独立现代化蓝图，不包含或冒充原厂二进制程序。</p>
+          </section>
+        </section>
+
+        <section class="workspace-section atlas-section" id="atlas">
+          <header class="section-header">
+            <div>
+              <p class="eyebrow">学科图谱</p>
+              <h2>3D 科研知识空间</h2>
+              <p>从学科进入子学科，沿能力与知识关系探索工具，并直接获取对应安装命令。</p>
+            </div>
+            <span class="section-meta">可访问列表视图 · 最多 600 个节点</span>
+          </header>
 
           <div class="atlas-frame" data-atlas-frame>
             <div class="atlas-toolbar">
               <label class="graph-search">
-                <span class="sr-only">Search the graph</span>
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.3-4.3m2.3-5.2a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"></path></svg>
-                <input id="graph-search" type="search" placeholder="Find a field, tool, Skill, or topic…" autocomplete="off">
+                <span class="sr-only">搜索图谱</span>
+                <input id="graph-search" type="search" placeholder="查找学科、工具、Skill 或知识主题…" autocomplete="off">
                 <kbd>/</kbd>
               </label>
               <label class="compact-select">
-                <span>View</span>
-                <select id="graph-scope" aria-label="Graph scope">
-                  <option value="overview">Curated overview</option>
-                  <option value="all">Complete atlas</option>
-                  <option value="agentic">Skills + MCP</option>
-                  <option value="software">Research software</option>
+                <span>范围</span>
+                <select id="graph-scope" aria-label="图谱范围">
+                  <option value="overview">精选总览</option>
+                  <option value="all">完整图谱</option>
+                  <option value="agentic">Skills 与 MCP</option>
+                  <option value="software">科研软件</option>
                 </select>
               </label>
-              <div class="graph-view-toggle" aria-label="Graph display mode">
-                <button type="button" class="is-active" data-graph-mode="3d" aria-pressed="true">3D</button>
-                <button type="button" data-graph-mode="list" aria-pressed="false">List</button>
+              <div class="segmented-control" aria-label="图谱显示模式">
+                <button type="button" class="is-active" data-graph-mode="3d" aria-pressed="true">3D 图谱</button>
+                <button type="button" data-graph-mode="list" aria-pressed="false">列表</button>
               </div>
             </div>
 
             <div class="atlas-body">
               <div class="graph-stage" id="graph-stage">
-                <div id="graph-canvas" aria-label="Interactive 3D research knowledge graph"></div>
+                <div id="graph-canvas" aria-label="交互式 3D 科研知识图谱"></div>
                 <div id="graph-labels" class="graph-labels" aria-hidden="true"></div>
                 <div class="graph-loading" id="graph-loading" role="status">
                   <span class="graph-loader"></span>
-                  <span>Mapping the research landscape…</span>
+                  <span>正在构建科研知识空间…</span>
                 </div>
                 <div class="graph-unavailable" id="graph-unavailable" hidden>
-                  <strong>3D rendering is unavailable.</strong>
-                  <span>The complete atlas remains available in the accessible list.</span>
-                  <button type="button" class="button button-small button-primary" data-show-graph-list>Open list view</button>
+                  <strong>当前浏览器无法使用 3D 渲染</strong>
+                  <span>仍可通过完整的无障碍列表探索图谱。</span>
+                  <button type="button" class="button button-primary button-small" data-show-graph-list>打开列表视图</button>
                 </div>
-                <div class="graph-controls" aria-label="Graph camera controls">
-                  <button type="button" data-graph-action="zoom-in" aria-label="Zoom in" title="Zoom in">+</button>
-                  <button type="button" data-graph-action="zoom-out" aria-label="Zoom out" title="Zoom out">−</button>
-                  <button type="button" data-graph-action="fit" aria-label="Fit graph" title="Fit graph">⌖</button>
-                  <button type="button" data-graph-action="reset" aria-label="Reset selection" title="Reset selection">↺</button>
+                <div class="graph-controls" aria-label="图谱镜头控制">
+                  <button type="button" data-graph-action="zoom-in" aria-label="放大">＋</button>
+                  <button type="button" data-graph-action="zoom-out" aria-label="缩小">−</button>
+                  <button type="button" data-graph-action="fit" aria-label="适应窗口">⌖</button>
+                  <button type="button" data-graph-action="reset" aria-label="重置选择">↺</button>
                 </div>
-                <div class="graph-hint">
-                  <span>DRAG TO ORBIT</span><i></i><span>SCROLL TO ZOOM</span><i></i><span>SELECT TO TRACE</span>
-                </div>
+                <div class="graph-hint"><span>拖动旋转</span><i></i><span>滚轮缩放</span><i></i><span>点击追踪关系</span></div>
               </div>
 
               <div class="graph-list-panel" id="graph-list-panel" hidden>
                 <div class="graph-list-summary">
-                  <strong id="graph-list-count">0 nodes</strong>
-                  <span>Keyboard-accessible atlas view</span>
+                  <strong id="graph-list-count">0 个节点</strong>
+                  <span>支持键盘操作的图谱视图</span>
                 </div>
                 <div class="graph-list" id="graph-list"></div>
               </div>
 
               <aside class="graph-inspector" id="graph-inspector" aria-live="polite">
                 <div class="inspector-empty">
-                  <span class="inspector-index">SELECT / 001</span>
+                  <span class="inspector-index">节点详情</span>
                   <div class="inspector-symbol" aria-hidden="true">⌁</div>
-                  <h3>Pick any node</h3>
-                  <p>Select a sphere or search above to reveal its disciplines, capabilities, neighbors, source, and modernization plan.</p>
+                  <h3>选择任意节点</h3>
+                  <p>点击球体或使用搜索，即可查看学科、科研能力、关联节点、来源、安装命令与现代化路线图。</p>
                 </div>
               </aside>
             </div>
 
-            <div class="atlas-legend" aria-label="Node legend">
-              <span><i style="--legend:#edff74"></i>Root</span>
-              <span><i style="--legend:#75e7ff"></i>Discipline</span>
-              <span><i style="--legend:#ff8a70"></i>Capability</span>
-              <span><i style="--legend:#c8a7ff"></i>Knowledge</span>
-              <span><i style="--legend:#93f6c1"></i>Skill / MCP</span>
-              <span><i style="--legend:#7ba7ff"></i>Software</span>
+            <div class="atlas-legend" aria-label="节点图例">
+              <span><i style="--legend:#6ca3ff"></i>图谱根节点</span>
+              <span><i style="--legend:#4c82f0"></i>学科</span>
+              <span><i style="--legend:#3ccf91"></i>科研能力</span>
+              <span><i style="--legend:#a78bfa"></i>知识主题</span>
+              <span><i style="--legend:#2dd4bf"></i>Skill / MCP</span>
+              <span><i style="--legend:#7aa7ff"></i>科研软件</span>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="disciplines-section section-shell" id="disciplines">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">02 / Field structure</p>
-            <h2>Industry-standard names.<br><em>One shared vocabulary.</em></h2>
-          </div>
-          <p>
-            The field axis follows the OECD Fields of Research and Development
-            classification. English and Chinese labels are maintained centrally,
-            so the graph, filters, cards, and roadmaps cannot drift apart.
-          </p>
-        </div>
-        <div class="discipline-groups" id="discipline-groups" aria-live="polite"></div>
-      </section>
-
-      <section class="stack-section">
-        <div class="section-shell">
-          <div class="section-heading section-heading-light">
+        <section class="workspace-section disciplines-section" id="disciplines">
+          <header class="section-header">
             <div>
-              <p class="eyebrow">03 / Callable science</p>
-              <h2>From intent<br><em>to validated result.</em></h2>
+              <p class="eyebrow">学科分类</p>
+              <h2>行业主流的中英文学科命名</h2>
+              <p>以 OECD FORD 为主轴，中文名称优先展示，英文标准名作为稳定的国际对照。</p>
             </div>
-            <p>
-              A3S treats research infrastructure as a connected stack. Each layer
-              keeps a clear contract, while the atlas exposes how they combine.
-            </p>
-          </div>
-          <div class="stack-flow">
-            <article>
-              <span class="stack-number">01</span>
-              <div class="stack-icon" aria-hidden="true">◎</div>
-              <h3>Agents</h3>
-              <p>Plan and coordinate research while preserving human approval and evidence.</p>
-              <small>RESEARCH INTENT</small>
-            </article>
-            <i class="stack-link" aria-hidden="true"></i>
-            <article>
-              <span class="stack-number">02</span>
-              <div class="stack-icon" aria-hidden="true">◇</div>
-              <h3>Skills</h3>
-              <p>Encode repeatable scientific methods, checkpoints, and domain judgment.</p>
-              <small>METHOD CONTRACT</small>
-            </article>
-            <i class="stack-link" aria-hidden="true"></i>
-            <article>
-              <span class="stack-number">03</span>
-              <div class="stack-icon" aria-hidden="true">⌘</div>
-              <h3>MCP</h3>
-              <p>Expose typed access to databases, models, instruments, and compute services.</p>
-              <small>TOOL INTERFACE</small>
-            </article>
-            <i class="stack-link" aria-hidden="true"></i>
-            <article>
-              <span class="stack-number">04</span>
-              <div class="stack-icon" aria-hidden="true">▦</div>
-              <h3>Software</h3>
-              <p>Runs validated computation and produces portable, inspectable artifacts.</p>
-              <small>SCIENTIFIC OUTPUT</small>
-            </article>
-          </div>
-        </div>
-      </section>
+            <a class="button button-secondary button-small" href="https://github.com/A3S-Lab/Science/blob/main/docs/taxonomy.md" target="_blank" rel="noreferrer">查看分类依据 ↗</a>
+          </header>
+          <div class="discipline-groups" id="discipline-groups" aria-live="polite"></div>
+        </section>
 
-      <section class="catalog-section section-shell" id="catalog">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">04 / Resource catalog</p>
-            <h2>Find the next link<br><em>in your workflow.</em></h2>
-          </div>
-          <p>
-            Search one normalized catalog assembled from native A3S resources,
-            Awesome AI for Science, and the research-relevant subset of
-            ScienceSoftware.
-          </p>
-        </div>
+        <section class="workspace-section catalog-section" id="catalog">
+          <header class="section-header">
+            <div>
+              <p class="eyebrow">套件市场</p>
+              <h2>找到并安装下一件科研工具</h2>
+              <p>统一目录汇集 A3S 原生套件、Awesome AI for Science 精选项目与科研相关的 ScienceSoftware 条目。</p>
+            </div>
+            <span class="section-meta"><b id="catalog-count">0</b> 个匹配套件</span>
+          </header>
 
-        <div class="catalog-workbench">
-          <div class="catalog-search-row">
-            <label class="catalog-search">
-              <span class="sr-only">Search resources</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.3-4.3m2.3-5.2a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"></path></svg>
-              <input id="catalog-search" type="search" placeholder="Search names, descriptions, tags…" autocomplete="off">
-            </label>
-            <button class="button button-quiet filter-toggle" type="button" data-filter-toggle aria-expanded="false">
-              Filters <span aria-hidden="true">＋</span>
-            </button>
-          </div>
+          <div class="catalog-workbench">
+            <div class="catalog-search-row">
+              <label class="catalog-search">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.3-4.3m2.3-5.2a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"></path></svg>
+                <span class="sr-only">搜索套件</span>
+                <input id="catalog-search" type="search" placeholder="搜索名称、中文简介、标签或包名…" autocomplete="off">
+              </label>
+              <button class="button button-secondary filter-toggle" type="button" data-filter-toggle aria-expanded="false">
+                筛选条件 <span aria-hidden="true">＋</span>
+              </button>
+            </div>
 
-          <div class="kind-tabs" id="kind-tabs" aria-label="Filter by resource type"></div>
+            <div class="kind-tabs" id="kind-tabs" aria-label="按资源类型筛选"></div>
 
-          <div class="filter-panel" id="filter-panel">
-            <label>
-              <span>Discipline / 学科</span>
-              <select id="discipline-filter"><option value="">All disciplines</option></select>
-            </label>
-            <label>
-              <span>Capability / 科研能力</span>
-              <select id="capability-filter"><option value="">All capabilities</option></select>
-            </label>
-            <label>
-              <span>Origin / 来源</span>
-              <select id="origin-filter">
-                <option value="">All origins</option>
-                <option value="native">A3S native</option>
-                <option value="ecosystem">Curated ecosystem</option>
-                <option value="sciencesoftware">ScienceSoftware</option>
-              </select>
-            </label>
-            <button type="button" class="text-button" id="clear-filters">Clear all</button>
-          </div>
+            <div class="filter-panel" id="filter-panel">
+              <label>
+                <span>学科领域</span>
+                <select id="discipline-filter"><option value="">全部学科</option></select>
+              </label>
+              <label>
+                <span>科研能力</span>
+                <select id="capability-filter"><option value="">全部能力</option></select>
+              </label>
+              <label>
+                <span>资源来源</span>
+                <select id="origin-filter">
+                  <option value="">全部来源</option>
+                  <option value="native">A3S 原生</option>
+                  <option value="ecosystem">开源生态精选</option>
+                  <option value="sciencesoftware">ScienceSoftware</option>
+                </select>
+              </label>
+              <button type="button" class="text-button" id="clear-filters">清除全部</button>
+            </div>
 
-          <div class="catalog-meta">
-            <p><strong id="catalog-count">0</strong> resources</p>
-            <p id="catalog-context">Across the complete atlas</p>
+            <div class="catalog-meta">
+              <p id="catalog-context">全部套件</p>
+              <p>每个条目都有唯一包 ID 与 A3S 安装命令</p>
+            </div>
+            <div class="catalog-grid" id="catalog-grid" aria-live="polite"></div>
+            <div class="catalog-more">
+              <button class="button button-secondary" type="button" id="show-more">加载更多</button>
+            </div>
           </div>
-          <div class="catalog-grid" id="catalog-grid" aria-live="polite"></div>
-          <div class="catalog-more">
-            <button class="button button-quiet" type="button" id="show-more">Show more</button>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="roadmap-section" id="roadmaps">
-        <div class="section-shell roadmap-layout">
-          <div class="roadmap-copy">
-            <p class="eyebrow">05 / Modernization program</p>
-            <h2>Legacy intent.<br><em>Modern foundations.</em></h2>
-            <p>
-              Every retained ScienceSoftware entry now has an independent,
-              clean-room successor plan: browser-first, Windows/macOS/Linux,
-              scriptable, reproducible, and ready for Skill and MCP integration.
-            </p>
-            <a class="button button-primary" href="https://github.com/A3S-Lab/Science/tree/main/roadmaps" target="_blank" rel="noreferrer">
-              Open all roadmaps <span aria-hidden="true">↗</span>
+        <section class="workspace-section roadmap-section" id="roadmaps">
+          <header class="section-header section-header-light">
+            <div>
+              <p class="eyebrow">现代化研发计划</p>
+              <h2>保留科研意图，重建跨平台基础</h2>
+              <p>每个保留的旧软件都有独立、洁净室式的现代版本路线图，统一面向 Web、Windows、macOS 与 Linux。</p>
+            </div>
+            <a class="button button-inverse button-small" href="https://github.com/A3S-Lab/Science/tree/main/roadmaps" target="_blank" rel="noreferrer">打开全部路线图 ↗</a>
+          </header>
+          <div class="roadmap-layout">
+            <div class="roadmap-score">
+              <strong data-metric="roadmaps">—</strong>
+              <span>份独立路线图</span>
+              <small>16 类现代架构原型</small>
+            </div>
+            <div class="roadmap-principles">
+              <article><span>01</span><div><h3>洁净室重构</h3><p>保留科研目标，不复制专有实现。</p></div></article>
+              <article><span>02</span><div><h3>全平台交付</h3><p>Web/PWA 与三大桌面系统统一项目格式。</p></div></article>
+              <article><span>03</span><div><h3>可复现优先</h3><p>输入、参数、环境、随机种子与校验和一起流转。</p></div></article>
+              <article><span>04</span><div><h3>智能体可调用</h3><p>同一能力通过 UI、CLI、SDK、Skill 与 MCP 暴露。</p></div></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="workspace-section sources-section">
+          <header class="section-header">
+            <div>
+              <p class="eyebrow">来源与边界</p>
+              <h2>可追溯、可刷新、不过度镜像</h2>
+            </div>
+          </header>
+          <div class="source-cards">
+            <a href="https://github.com/A3S-Lab/Science" target="_blank" rel="noreferrer">
+              <span class="source-mark source-blue">A3S</span>
+              <div><strong>A3S Science</strong><small>原生 Skills 与 MCP 套件</small></div>
+              <b data-origin-count="native">—</b>
+            </a>
+            <a href="https://github.com/ai4s-research/awesome-ai-for-science" target="_blank" rel="noreferrer">
+              <span class="source-mark source-purple">AI4S</span>
+              <div><strong>Awesome AI for Science</strong><small>科研生态精选快照</small></div>
+              <b data-origin-count="ecosystem">—</b>
+            </a>
+            <a href="https://www.sciencesoftware.com.cn/web/index.html" target="_blank" rel="noreferrer">
+              <span class="source-mark source-green">SS</span>
+              <div><strong>ScienceSoftware</strong><small>仅保留科研相关目录元数据</small></div>
+              <b data-origin-count="sciencesoftware">—</b>
             </a>
           </div>
-          <div class="roadmap-score">
-            <div class="score-ring">
-              <strong data-metric="roadmaps">—</strong>
-              <span>individual<br>roadmaps</span>
-            </div>
-            <dl>
-              <div><dt>16</dt><dd>architecture archetypes</dd></div>
-              <div><dt>3</dt><dd>desktop platforms</dd></div>
-              <div><dt>1</dt><dd>portable project contract</dd></div>
-            </dl>
-          </div>
-          <div class="roadmap-principles">
-            <article>
-              <span>01</span>
-              <h3>Clean-room by design</h3>
-              <p>Preserve the research intent without copying proprietary implementation details.</p>
-            </article>
-            <article>
-              <span>02</span>
-              <h3>Cross-platform contract</h3>
-              <p>Web/PWA plus signed Windows, macOS, and Linux desktop packages.</p>
-            </article>
-            <article>
-              <span>03</span>
-              <h3>Reproducibility first</h3>
-              <p>Inputs, parameters, environments, seeds, provenance, and checksums travel together.</p>
-            </article>
-            <article>
-              <span>04</span>
-              <h3>Agent-ready interfaces</h3>
-              <p>The same validated operations surface through UI, CLI, SDK, Skill, and MCP.</p>
-            </article>
-          </div>
-        </div>
-      </section>
+          <p class="source-note">A3S 只保存精简目录元数据、规范化分类与原始链接，不镜像长文章、媒体或原厂安装程序。收录代表科研相关性判断，不代表背书；运行前请核对维护状态、许可与平台支持。</p>
+        </section>
 
-      <section class="sources-section section-shell">
-        <div class="sources-intro">
-          <p class="eyebrow">06 / Provenance</p>
-          <h2>Curated, attributed,<br><em>and refreshable.</em></h2>
-        </div>
-        <div class="source-cards">
-          <a href="https://github.com/A3S-Lab/Science" target="_blank" rel="noreferrer">
-            <span class="source-mark">A3S</span>
-            <div><strong>A3S Science</strong><small>Native Skills and MCP domains</small></div>
-            <b data-origin-count="native">—</b>
-          </a>
-          <a href="https://github.com/ai4s-research/awesome-ai-for-science" target="_blank" rel="noreferrer">
-            <span class="source-mark">AI4S</span>
-            <div><strong>Awesome AI for Science</strong><small>Curated ecosystem snapshot</small></div>
-            <b data-origin-count="ecosystem">—</b>
-          </a>
-          <a href="https://www.sciencesoftware.com.cn/web/index.html" target="_blank" rel="noreferrer">
-            <span class="source-mark">SS</span>
-            <div><strong>ScienceSoftware</strong><small>Research-relevant directory metadata</small></div>
-            <b data-origin-count="sciencesoftware">—</b>
-          </a>
-        </div>
-        <p class="source-note">
-          A3S stores concise directory metadata and canonical links, not mirrored
-          articles, media, or installers. Inclusion is a relevance decision, not an
-          endorsement. Product capabilities and platform status should be verified
-          with each maintainer.
-        </p>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="section-shell footer-grid">
-        <div>
-          <a class="brand brand-footer" href="#top">
-            <img src="./assets/mark.svg" alt="" width="34" height="34">
-            <span>A3S <b>SCIENCE</b></span>
-          </a>
-          <p>Open infrastructure for callable, reproducible science.</p>
-        </div>
-        <div>
-          <strong>Explore</strong>
-          <a href="#atlas">3D atlas</a>
-          <a href="#disciplines">Disciplines</a>
-          <a href="#catalog">Catalog</a>
-        </div>
-        <div>
-          <strong>Build</strong>
-          <a href="https://github.com/A3S-Lab/Science/tree/main/roadmaps" target="_blank" rel="noreferrer">Roadmaps</a>
-          <a href="https://github.com/A3S-Lab/Science" target="_blank" rel="noreferrer">Repository</a>
-          <a href="https://github.com/A3S-Lab/Science/issues" target="_blank" rel="noreferrer">Contribute</a>
-        </div>
-        <div class="footer-status">
-          <span><i></i> CATALOG ONLINE</span>
-          <small>Data snapshot <span data-snapshot-date="iso">2026-07-27</span></small>
-        </div>
-      </div>
-      <div class="section-shell footer-base">
-        <span>© 2026 A3S Lab</span>
-        <span>Taxonomy aligned with OECD FORD</span>
-        <span>Built in the open</span>
-      </div>
-    </footer>
+        <footer class="workspace-footer">
+          <span>© 2026 A3S Lab</span>
+          <span>目录快照 <b data-snapshot-date="iso">2026-07-27</b></span>
+          <span>学科分类对齐 OECD FORD</span>
+        </footer>
+      </main>
+    </div>
 
     <dialog class="resource-dialog" id="resource-dialog">
-      <button class="dialog-close" type="button" aria-label="Close resource details">×</button>
+      <button class="dialog-close" type="button" aria-label="关闭套件详情">×</button>
       <div id="resource-dialog-content"></div>
     </dialog>
 
+    <div class="copy-toast" id="copy-toast" role="status" aria-live="polite" hidden>
+      <span aria-hidden="true">✓</span><strong>已复制命令</strong>
+    </div>
+
     <noscript>
-      <div class="noscript-message">JavaScript is required to load the interactive catalog. The source data remains available under <code>site/data/</code>.</div>
+      <div class="noscript-message">需要启用 JavaScript 才能加载交互式目录；原始数据仍可在 <code>site/data/</code> 下查看。</div>
     </noscript>
   </body>
 </html>

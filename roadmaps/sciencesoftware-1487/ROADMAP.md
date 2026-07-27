@@ -13,6 +13,15 @@
 
 The product anchor is **无纸化的被试征集与实验管理系统**. The successor should preserve that research intent while replacing opaque, machine-bound workflows with portable projects, documented interfaces, and reproducible computation.
 
+## A3S package
+
+- **Catalog package:** `@a3s-science/sciencesoftware-1487`
+- **Install:** `a3s install use/a3s/sciencesoftware-1487`
+- **Upgrade:** `a3s upgrade use/a3s/sciencesoftware-1487`
+- **Uninstall:** `a3s uninstall use/a3s/sciencesoftware-1487`
+
+This registry package installs the software knowledge card and this independent modernization blueprint. It does not contain, redistribute, or claim to install the original vendor binary.
+
 ## Product vision
 
 Unify ethical study design, data collection, qualitative and quantitative analysis, and transparent reporting in a privacy-preserving research workspace.

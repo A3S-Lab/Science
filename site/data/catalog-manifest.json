@@ -40,5 +40,20 @@
     "count": 340,
     "profileCount": 16,
     "status": "Independent clean-room successor proposals"
+  },
+  "packages": {
+    "count": 472,
+    "registryUrl": "https://a3s-lab.github.io/Science/registry/",
+    "publisher": "a3s",
+    "componentPattern": "use/a3s/<resource-id>",
+    "target": "any",
+    "channel": "stable",
+    "trust": "TUF signed metadata",
+    "roles": {
+      "workflow": 35,
+      "interface": 25,
+      "adapter": 72,
+      "blueprint": 340
+    }
   }
 }

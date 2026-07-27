@@ -13,6 +13,15 @@
 
 The product anchor is **推断亲缘关系的软件**. The successor should preserve that research intent while replacing opaque, machine-bound workflows with portable projects, documented interfaces, and reproducible computation.
 
+## A3S package
+
+- **Catalog package:** `@a3s-science/sciencesoftware-563`
+- **Install:** `a3s install use/a3s/sciencesoftware-563`
+- **Upgrade:** `a3s upgrade use/a3s/sciencesoftware-563`
+- **Uninstall:** `a3s uninstall use/a3s/sciencesoftware-563`
+
+This registry package installs the software knowledge card and this independent modernization blueprint. It does not contain, redistribute, or claim to install the original vendor binary.
+
 ## Product vision
 
 Offer portable, workflow-native sequence and omics analysis with explicit references, environments, and provenance from raw data to interpretable results.

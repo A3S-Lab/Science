@@ -5,6 +5,7 @@ for A3S.
 
 [Explore the live Science Atlas](https://a3s-lab.github.io/Science/) ·
 [Browse the catalog data](site/data/) ·
+[Use the Science package registry](docs/package-registry.md) ·
 [Open modernization roadmaps](roadmaps/)
 
 ## Science Atlas
@@ -26,6 +27,28 @@ The graph uses the interaction and performance principles of the A3S Web memory
 graph: a cohesive bounded subgraph, searchable nodes, selected-neighbor
 highlighting, camera focus, a rendering cap, reduced-motion support, and an
 always-available accessible list.
+
+The Chinese application shell follows the A3S Office design system: the same
+panel hierarchy, compact controls, sidebar workspace navigation, typography,
+color tokens, responsive drawer behavior, and light/dark themes.
+
+## Package registry
+
+Every one of the 472 catalog resources has an npm-style display name and an A3S
+managed component ID. For example:
+
+```sh
+a3s install use/a3s/native-autodock
+a3s upgrade use/a3s/native-autodock
+a3s uninstall use/a3s/native-autodock
+```
+
+The GitHub Pages deployment also hosts a TUF-signed registry. It can be enrolled
+with the public bootstrap-root digest shown on the website. Native Skill
+packages include their lightweight scripts and references. MCP and ecosystem
+packages install managed entry contracts; ScienceSoftware packages install the
+knowledge card and independent modernization blueprint, never a proprietary
+vendor binary. See the [package registry contract](docs/package-registry.md).
 
 ## Catalog snapshot
 
@@ -112,7 +135,13 @@ site/data/
 ├── native.jsonl              # A3S-native Skills and MCP resources
 ├── ecosystem.jsonl           # Awesome AI for Science selections
 ├── sciencesoftware.jsonl     # filtered ScienceSoftware directory metadata
-└── roadmaps.jsonl            # resource-to-roadmap mapping
+├── roadmaps.jsonl            # resource-to-roadmap mapping
+└── packages.jsonl            # one A3S lifecycle contract per resource
+
+site/registry/
+├── index.json                # registry identity and public enrollment command
+├── metadata/                 # TUF root, timestamp, snapshot, and targets roles
+└── targets/                  # 472 portable extension archives
 ```
 
 Every resource has the same core fields:
@@ -147,8 +176,20 @@ powershell -ExecutionPolicy Bypass -File scripts/sync-sciencesoftware.ps1
 # Regenerate all per-resource modernization plans and their site mapping.
 powershell -ExecutionPolicy Bypass -File scripts/generate-modernization-roadmaps.ps1
 
+# Regenerate all package identities and lifecycle commands.
+powershell -ExecutionPolicy Bypass -File scripts/generate-package-index.ps1
+
+# Rebuild the signed registry with the offline local signing key.
+cargo run --manifest-path tools/registry-builder/Cargo.toml `
+  --bin a3s-science-registry-builder -- `
+  --catalog site/data/packages.jsonl `
+  --output site/registry `
+  --key-file .registry-signing-key `
+  --metadata-version 1 `
+  --expires 2030-01-01T00:00:00Z
+
 # Validate taxonomy IDs, source counts, arrays, URLs, filters, roadmaps, assets,
-# file-size rules, and the vendored graph dependency checksum.
+# package coverage, registry artifacts, and the vendored graph dependency.
 powershell -ExecutionPolicy Bypass -File scripts/validate-site-data.ps1
 
 # Preview the static site.

@@ -13,6 +13,15 @@
 
 The product anchor is **建筑分析软件**. The successor should preserve that research intent while replacing opaque, machine-bound workflows with portable projects, documented interfaces, and reproducible computation.
 
+## A3S package
+
+- **Catalog package:** `@a3s-science/sciencesoftware-654`
+- **Install:** `a3s install use/a3s/sciencesoftware-654`
+- **Upgrade:** `a3s upgrade use/a3s/sciencesoftware-654`
+- **Uninstall:** `a3s uninstall use/a3s/sciencesoftware-654`
+
+This registry package installs the software knowledge card and this independent modernization blueprint. It does not contain, redistribute, or claim to install the original vendor binary.
+
 ## Product vision
 
 Provide a modular engineering workbench that separates geometry, meshing, physics, solvers, post-processing, and verification into open interfaces.

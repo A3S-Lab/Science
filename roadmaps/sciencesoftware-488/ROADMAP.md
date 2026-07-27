@@ -13,6 +13,15 @@
 
 The product anchor is **SPC分析、控制图及报告系统**. The successor should preserve that research intent while replacing opaque, machine-bound workflows with portable projects, documented interfaces, and reproducible computation.
 
+## A3S package
+
+- **Catalog package:** `@a3s-science/sciencesoftware-488`
+- **Install:** `a3s install use/a3s/sciencesoftware-488`
+- **Upgrade:** `a3s upgrade use/a3s/sciencesoftware-488`
+- **Uninstall:** `a3s uninstall use/a3s/sciencesoftware-488`
+
+This registry package installs the software knowledge card and this independent modernization blueprint. It does not contain, redistribute, or claim to install the original vendor binary.
+
 ## Product vision
 
 Deliver transparent statistical analysis where every model, assumption check, transformation, and figure can be reproduced from a portable project.

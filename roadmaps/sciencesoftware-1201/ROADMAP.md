@@ -13,6 +13,15 @@
 
 The product anchor is **化学数据库软件**. The successor should preserve that research intent while replacing opaque, machine-bound workflows with portable projects, documented interfaces, and reproducible computation.
 
+## A3S package
+
+- **Catalog package:** `@a3s-science/sciencesoftware-1201`
+- **Install:** `a3s install use/a3s/sciencesoftware-1201`
+- **Upgrade:** `a3s upgrade use/a3s/sciencesoftware-1201`
+- **Uninstall:** `a3s uninstall use/a3s/sciencesoftware-1201`
+
+This registry package installs the software knowledge card and this independent modernization blueprint. It does not contain, redistribute, or claim to install the original vendor binary.
+
 ## Product vision
 
 Unify molecular and materials data, trusted computation engines, workflow provenance, and interactive structure analysis without locking researchers to one solver.

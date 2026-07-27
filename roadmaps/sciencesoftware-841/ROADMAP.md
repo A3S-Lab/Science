@@ -13,6 +13,15 @@
 
 The product anchor is **生物数据分析软件**. The successor should preserve that research intent while replacing opaque, machine-bound workflows with portable projects, documented interfaces, and reproducible computation.
 
+## A3S package
+
+- **Catalog package:** `@a3s-science/sciencesoftware-841`
+- **Install:** `a3s install use/a3s/sciencesoftware-841`
+- **Upgrade:** `a3s upgrade use/a3s/sciencesoftware-841`
+- **Uninstall:** `a3s uninstall use/a3s/sciencesoftware-841`
+
+This registry package installs the software knowledge card and this independent modernization blueprint. It does not contain, redistribute, or claim to install the original vendor binary.
+
 ## Product vision
 
 Create an extensible analysis environment for biological measurements, experiments, and models with transparent provenance and validated methods.

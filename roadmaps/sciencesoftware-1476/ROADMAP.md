@@ -13,6 +13,15 @@
 
 The product anchor is **消防火灾模拟软件**. The successor should preserve that research intent while replacing opaque, machine-bound workflows with portable projects, documented interfaces, and reproducible computation.
 
+## A3S package
+
+- **Catalog package:** `@a3s-science/sciencesoftware-1476`
+- **Install:** `a3s install use/a3s/sciencesoftware-1476`
+- **Upgrade:** `a3s upgrade use/a3s/sciencesoftware-1476`
+- **Uninstall:** `a3s uninstall use/a3s/sciencesoftware-1476`
+
+This registry package installs the software knowledge card and this independent modernization blueprint. It does not contain, redistribute, or claim to install the original vendor binary.
+
 ## Product vision
 
 Build a scenario-first environment for network, agent-based, discrete-event, safety, and transport simulation with calibrated and explainable results.

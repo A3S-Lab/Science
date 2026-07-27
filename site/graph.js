@@ -2,28 +2,65 @@
   "use strict";
 
   const COLORS = {
-    root: "#edff74",
-    group: "#58d8f4",
-    discipline: "#75e7ff",
-    capabilityHub: "#ff8069",
-    capability: "#ff9a86",
-    knowledgeHub: "#c8a7ff",
-    topic: "#c8a7ff",
-    Skill: "#9af6b6",
-    MCP: "#67e0c0",
-    Software: "#7ba7ff",
-    Agent: "#ffb067",
-    Workbench: "#f28bd6"
+    root: "#6ca3ff",
+    group: "#75a9ff",
+    discipline: "#4c82f0",
+    capabilityHub: "#3ccf91",
+    capability: "#2ebd84",
+    knowledgeHub: "#a78bfa",
+    topic: "#9b7af5",
+    Skill: "#3ccf91",
+    MCP: "#2dd4bf",
+    Software: "#7aa7ff",
+    Agent: "#eda94c",
+    Workbench: "#c084fc"
   };
 
   const TYPE_LABELS = {
-    root: "Atlas root",
-    group: "Discipline group",
-    discipline: "Research discipline",
-    capabilityHub: "Capability axis",
-    capability: "Research capability",
-    knowledgeHub: "Knowledge axis",
-    topic: "Knowledge topic"
+    root: "图谱根节点",
+    group: "学科门类",
+    discipline: "研究学科",
+    capabilityHub: "科研能力轴",
+    capability: "科研能力",
+    knowledgeHub: "知识主题轴",
+    topic: "知识主题"
+  };
+
+  const KIND_LABELS = {
+    Skill: "科研技能",
+    MCP: "MCP 服务",
+    Software: "科研软件",
+    Agent: "科研智能体",
+    Workbench: "科研工作台"
+  };
+
+  const TOPIC_LABELS = {
+    "Literature review": "文献综述",
+    "Evidence synthesis": "证据综合",
+    Citations: "引文",
+    Bioinformatics: "生物信息学",
+    "Drug discovery": "药物发现",
+    "Protein structure": "蛋白质结构",
+    "Molecular dynamics": "分子动力学",
+    Docking: "分子对接",
+    "Virtual screening": "虚拟筛选",
+    Genomics: "基因组学",
+    Proteomics: "蛋白质组学",
+    "Single-cell": "单细胞分析",
+    Chemistry: "化学",
+    "Scientific visualization": "科学可视化",
+    Statistics: "统计学",
+    Simulation: "仿真",
+    "Machine learning": "机器学习",
+    "Deep learning": "深度学习",
+    "Agent skills": "智能体技能",
+    "Skill library": "技能库",
+    "Research workflow": "科研工作流",
+    "Data analysis": "数据分析",
+    "Materials science": "材料科学",
+    Medicine: "医学",
+    Ecology: "生态学",
+    Reproducibility: "可复现性"
   };
 
   const MAX_NODES = 600;
@@ -138,11 +175,11 @@
 
     addNode({
       id: "atlas:root",
-      label: "A3S Science",
-      labelZh: "科研知识图谱",
+      label: "A3S 科研套件",
+      labelEn: "A3S Science Registry",
       type: "root",
       val: 32,
-      description: "The connected index of research fields, capabilities, knowledge, and callable resources."
+      description: "连接学科、科研能力、知识主题与可安装套件的统一索引。"
     });
 
     const groups = new Map();
@@ -152,8 +189,8 @@
         groups.set(discipline.group, id);
         addNode({
           id,
-          label: discipline.group,
-          labelZh: discipline.groupZh,
+          label: discipline.groupZh,
+          labelEn: discipline.group,
           type: "group",
           val: 18
         });
@@ -162,8 +199,8 @@
       const id = `discipline:${discipline.id}`;
       addNode({
         id,
-        label: discipline.name,
-        labelZh: discipline.nameZh,
+        label: discipline.nameZh,
+        labelEn: discipline.name,
         code: discipline.code,
         type: "discipline",
         taxonomyId: discipline.id,
@@ -174,8 +211,8 @@
 
     addNode({
       id: "axis:capabilities",
-      label: "Research capabilities",
-      labelZh: "科研能力",
+      label: "科研能力",
+      labelEn: "Research Capabilities",
       type: "capabilityHub",
       val: 20
     });
@@ -184,8 +221,8 @@
       const id = `capability:${capability.id}`;
       addNode({
         id,
-        label: capability.name,
-        labelZh: capability.nameZh,
+        label: capability.nameZh,
+        labelEn: capability.name,
         type: "capability",
         taxonomyId: capability.id,
         val: 10
@@ -197,8 +234,8 @@
     const topicIds = new Map();
     addNode({
       id: "axis:knowledge",
-      label: "Research knowledge",
-      labelZh: "科研知识",
+      label: "科研知识",
+      labelEn: "Research Knowledge",
       type: "knowledgeHub",
       val: 18
     });
@@ -206,10 +243,11 @@
     for (const [topic, count] of topics) {
       const id = `topic:${slug(topic)}`;
       topicIds.set(topic, id);
+      const translated = TOPIC_LABELS[topic];
       addNode({
         id,
-        label: topic,
-        labelZh: "",
+        label: translated || topic,
+        labelEn: translated ? topic : "",
         type: "topic",
         val: Math.min(9, 4 + Math.log2(count + 1)),
         count
@@ -229,7 +267,7 @@
       addNode({
         id: `resource:${resource.id}`,
         label: resource.name,
-        labelZh: resource.language === "zh-CN" ? resource.description : "",
+        labelEn: KIND_LABELS[resource.kind] || resource.kind,
         type: "resource",
         kind: resource.kind,
         val: resource.featured ? 8 : resource.origin === "native" ? 6 : 4,
@@ -297,16 +335,16 @@
 
   function nodeColor(node) {
     const query = state.search.trim().toLocaleLowerCase();
-    const searchMiss = query && !`${node.label} ${node.labelZh || ""}`.toLocaleLowerCase().includes(query);
-    if (!relatedToActive(node.id) || searchMiss) return "rgba(72, 91, 84, 0.22)";
+    const searchMiss = query && !`${node.label} ${node.labelEn || ""}`.toLocaleLowerCase().includes(query);
+    if (!relatedToActive(node.id) || searchMiss) return "rgba(96, 105, 126, 0.18)";
     return node.color;
   }
 
   function linkColor(link) {
     const active = activeNodeId();
-      if (!active) return "rgba(117, 231, 255, 0.21)";
+    if (!active) return "rgba(108, 163, 255, 0.18)";
     const connected = nodeId(link.source) === active || nodeId(link.target) === active;
-    return connected ? "rgba(237, 255, 116, 0.82)" : "rgba(72, 91, 84, 0.05)";
+    return connected ? "rgba(108, 163, 255, 0.86)" : "rgba(96, 105, 126, 0.04)";
   }
 
   function linkWidth(link) {
@@ -320,9 +358,9 @@
     const title = document.createElement("strong");
     title.textContent = node.label;
     wrapper.append(title);
-    if (node.labelZh) {
+    if (node.labelEn) {
       const secondary = document.createElement("span");
-      secondary.textContent = node.labelZh;
+      secondary.textContent = node.labelEn;
       wrapper.append(secondary);
     }
     return wrapper;
@@ -440,25 +478,25 @@
     return normalizeArray(ids)
       .map(id => lookup.get(id))
       .filter(Boolean)
-      .map(entry => `${entry.name} / ${entry.nameZh}`);
+      .map(entry => `${entry.nameZh} / ${entry.name}`);
   }
 
   function renderInspector(node) {
     if (!node) {
       elements.inspector.innerHTML = `
         <div class="inspector-empty">
-          <span class="inspector-index">SELECT / 001</span>
+          <span class="inspector-index">节点详情</span>
           <div class="inspector-symbol" aria-hidden="true">⌁</div>
-          <h3>Pick any node</h3>
-          <p>Select a sphere or search above to reveal its disciplines, capabilities, neighbors, source, and modernization plan.</p>
+          <h3>选择任意节点</h3>
+          <p>点击球体或使用搜索，即可查看学科、科研能力、关联节点、来源、安装命令与现代化路线图。</p>
         </div>`;
       return;
     }
 
     const resource = node.resource;
-    const typeLabel = resource?.kind || TYPE_LABELS[node.type] || node.type;
-    const description = resource?.description || node.description ||
-      `A node on the ${typeLabel.toLocaleLowerCase()} layer of the A3S Science atlas.`;
+    const typeLabel = resource ? KIND_LABELS[resource.kind] : TYPE_LABELS[node.type] || node.type;
+    const description = resource?.package?.summaryZh || node.description ||
+      `A3S 科研知识图谱中的${typeLabel}节点。`;
     const labels = resource
       ? [
           ...taxonomyLabels(resource.disciplines, state.taxonomy.disciplines),
@@ -473,25 +511,38 @@
       .slice(0, 8);
     const actions = resource ? `
       <div class="inspector-actions">
-        <a class="button button-primary button-small" href="${escapeHtml(resource.url)}" target="_blank" rel="noreferrer">Open source <span aria-hidden="true">↗</span></a>
-        ${resource.roadmap ? `<a class="button button-quiet button-small" href="${escapeHtml(resource.roadmap.url)}" target="_blank" rel="noreferrer">Modernization roadmap <span aria-hidden="true">↗</span></a>` : ""}
+        <button class="button button-primary button-small" type="button" data-inspect-resource="${escapeHtml(resource.id)}">查看套件详情</button>
+        <a class="button button-secondary button-small" href="${escapeHtml(resource.url)}" target="_blank" rel="noreferrer">原始项目 <span aria-hidden="true">↗</span></a>
+        ${resource.roadmap ? `<a class="button button-secondary button-small" href="${escapeHtml(resource.roadmap.url)}" target="_blank" rel="noreferrer">研发路线图 <span aria-hidden="true">↗</span></a>` : ""}
+      </div>` : "";
+    const packageBlock = resource?.package ? `
+      <div class="inspector-package">
+        <span>${escapeHtml(resource.package.packageRoleZh)} · v${escapeHtml(resource.package.version)}</span>
+        <div class="inspector-command">
+          <code>${escapeHtml(resource.package.installCommand)}</code>
+          <button type="button" data-copy-command="${escapeHtml(resource.package.installCommand)}">复制</button>
+        </div>
       </div>` : "";
 
     elements.inspector.innerHTML = `
-      <span class="inspector-kicker">NODE / ${String(node.degree).padStart(3, "0")}</span>
+      <span class="inspector-kicker">关联节点 / ${String(node.degree).padStart(3, "0")}</span>
       <span class="inspector-type">${escapeHtml(typeLabel)}</span>
       <h3>${escapeHtml(node.label)}</h3>
-      ${node.labelZh ? `<p class="inspector-zh">${escapeHtml(node.labelZh)}</p>` : ""}
+      ${node.labelEn ? `<p class="inspector-en">${escapeHtml(node.labelEn)}</p>` : ""}
       <p>${escapeHtml(description)}</p>
       ${labels.length ? `<div class="inspector-list">${labels.slice(0, 7).map(label => `<span>${escapeHtml(label)}</span>`).join("")}</div>` : ""}
+      ${packageBlock}
       ${actions}
       <div class="inspector-neighbors">
-        <strong>CONNECTED NODES / ${neighborIds.length}</strong>
+        <strong>关联节点 / ${neighborIds.length}</strong>
         ${neighborNodes.map(neighbor => `<button type="button" data-neighbor-id="${escapeHtml(neighbor.id)}">${escapeHtml(neighbor.label)}</button>`).join("")}
       </div>`;
 
     elements.inspector.querySelectorAll("[data-neighbor-id]").forEach(button => {
       button.addEventListener("click", () => selectNode(button.dataset.neighborId, true));
+    });
+    elements.inspector.querySelector("[data-inspect-resource]")?.addEventListener("click", event => {
+      window.A3SApp?.openResource(event.currentTarget.dataset.inspectResource);
     });
   }
 
@@ -566,12 +617,12 @@
   function renderList() {
     const query = state.search.trim().toLocaleLowerCase();
     const nodes = state.graphData.nodes
-      .filter(node => !query || `${node.label} ${node.labelZh || ""}`.toLocaleLowerCase().includes(query))
+      .filter(node => !query || `${node.label} ${node.labelEn || ""}`.toLocaleLowerCase().includes(query))
       .sort((left, right) => {
         const typeRank = { root: 8, group: 7, discipline: 6, capabilityHub: 5, knowledgeHub: 5, capability: 4, topic: 3, resource: 1 };
         return (typeRank[right.type] || 0) - (typeRank[left.type] || 0) || right.degree - left.degree || left.label.localeCompare(right.label);
       });
-    elements.listCount.textContent = `${nodes.length.toLocaleString()} nodes`;
+    elements.listCount.textContent = `${nodes.length.toLocaleString("zh-CN")} 个节点`;
     elements.list.replaceChildren();
     for (const node of nodes.slice(0, 220)) {
       const button = document.createElement("button");
@@ -579,7 +630,7 @@
       const title = document.createElement("span");
       title.textContent = node.label;
       const meta = document.createElement("small");
-      meta.textContent = node.resource?.kind || TYPE_LABELS[node.type] || node.type;
+      meta.textContent = node.resource ? KIND_LABELS[node.resource.kind] : TYPE_LABELS[node.type] || node.type;
       button.append(title, meta);
       button.addEventListener("click", () => {
         selectNode(node.id);
@@ -653,7 +704,7 @@
       if (event.key !== "Enter") return;
       const query = state.search.trim().toLocaleLowerCase();
       const match = state.graphData.nodes.find(node =>
-        `${node.label} ${node.labelZh || ""}`.toLocaleLowerCase().includes(query)
+        `${node.label} ${node.labelEn || ""}`.toLocaleLowerCase().includes(query)
       );
       if (match) {
         setMode("3d");

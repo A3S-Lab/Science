@@ -6,6 +6,12 @@ __pycache__/
 # Archives
 *.zip
 
+# Local registry signing material
+.registry-signing-key
+
+# Rust tooling
+tools/registry-builder/target/
+
 # OS
 .DS_Store
 Thumbs.db
