@@ -1,0 +1,17 @@
+{
+  "name": "A3S Science Atlas",
+  "short_name": "A3S Science",
+  "description": "A navigable atlas of scientific software, Skills, MCP servers, research agents, and knowledge.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#07110f",
+  "theme_color": "#07110f",
+  "icons": [
+    {
+      "src": "./assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

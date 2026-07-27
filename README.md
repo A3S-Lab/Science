@@ -1,110 +1,165 @@
 # A3S Science
 
-A3S 的生命科学、计算化学、分子模拟与研究技能集合。
+Scientific Skills, MCP servers, research software, agents, and knowledge tooling
+for A3S.
 
-## 项目结构
+[Explore the live Science Atlas](https://a3s-lab.github.io/Science/) ·
+[Browse the catalog data](site/data/) ·
+[Open modernization roadmaps](roadmaps/)
 
-| 目录 | 说明 |
-|------|------|
-| `autodock/` | 自动化分子对接技能 |
-| `amber-md/` | Amber 分子动力学模拟技能 |
-| `claude-science/` | Claude Science 扩展集合（MCP 服务器 + 科学技能） |
-| `storm-research/` | STORM 多视角研究综述技能 |
+## Science Atlas
 
-## 技能列表
+The static site under [`site/`](site/) turns the repository into an explorable
+research map. Its interactive 3D graph connects:
 
-### 1. claude-science — Claude Science 科学计算扩展
+- OECD FORD-aligned disciplines and subdisciplines with centrally maintained
+  English and Chinese names;
+- research capabilities such as literature discovery, scientific computing,
+  modeling and simulation, visualization, reproducibility, and agentic
+  workflows;
+- native and curated software, Skills, MCP servers, agents, and workbenches;
+- knowledge topics derived from resource metadata;
+- an individual cross-platform modernization roadmap for every retained
+  ScienceSoftware entry.
 
-面向生命科学与计算化学的综合扩展集合，包含 MCP 数据服务和科学计算技能。
+The graph uses the interaction and performance principles of the A3S Web memory
+graph: a cohesive bounded subgraph, searchable nodes, selected-neighbor
+highlighting, camera focus, a rendering cap, reduced-motion support, and an
+always-available accessible list.
 
-**MCP 服务器：**
-- **bio-tools**：统一查询接口，覆盖 23 个生物信息学数据域约 247 个工具（PubMed、ChEMBL、ClinVar、GTEx、PDB 等）
-- **ketcher-chemistry**：交互式化学结构编辑器（基于 EPAM Ketcher）
+## Catalog snapshot
 
-**科学技能（30+ 个）：**
-- 蛋白质结构预测与设计（AlphaFold2、Boltz-2、Chai-1、OpenFold3、ESMFold2、ProteinMPNN 等）
-- 基因组与单细胞分析（Evo2、Borzoi、scGPT、scVI-tools）
-- 分子对接（DiffDock-L 全盲对接）
-- 远程计算与 HPC（SSH/SLURM、Modal 无服务器 GPU）
-- 科研写作与可视化（出版级图表、文献综述、PDF 解析）
+| Source | Included | Notes |
+| --- | ---: | --- |
+| A3S Science | 60 | 35 Skills and 25 MCP resources, including 23 Bio Tools domains |
+| Awesome AI for Science | 72 | Curated Skills, MCP servers, workbenches, agents, and modern research software |
+| ScienceSoftware | 340 | Research-relevant entries selected from 469 available records |
+| **Total** | **472** | One normalized resource schema |
 
-详见 [claude-science/README.md](claude-science/README.md)
+ScienceSoftware collection stores concise directory metadata and canonical
+links only. Long descriptions, media, and installers are not mirrored. Of 469
+records reviewed, 129 generic utilities unrelated to research were excluded.
+See [catalog methodology](docs/catalog-methodology.md) for the explicit policy
+and category counts.
 
-### 2. autodock — 自动化分子对接
+The Awesome AI for Science snapshot is attributed to commit
+[`762864c`](https://github.com/ai4s-research/awesome-ai-for-science/commit/762864c467c0da22d43a7ed8d6c6640a57d00e4b).
 
-基于 AutoDock Vina 的全自动分子对接工作流。从 PDB 文件到对接结果，全程自动化处理。
+## Taxonomy
 
-**核心功能：**
-- 自动处理受体蛋白（去水、去小分子、加氢、可选保留辅因子）
-- 支持 10+ 种配体格式（SMILES、SDF、MOL2、PDB、CDX 等）
-- 多种对接中心定义方式（配体中心、残基选择、手动坐标）
-- 多核 CPU 并行加速
-- 自动生成能量排名、可视化脚本和图表
-- 支持虚拟筛选
+Research fields and research capabilities are separate axes:
 
-**触发关键词：** 分子对接、docking、AutoDock Vina、虚拟筛选、蛋白-配体对接、PDB 处理
-
-### 3. amber-md — Amber 分子动力学模拟
-
-Amber 分子动力学模拟全流程助手。Claude 直接执行体系构建和轨迹分析，用户自行运行计算密集的模拟步骤。
-
-**核心功能：**
-- 体系构建：antechamber / parmchk2 / tleap 自动化
-- 自动生成 Amber 输入文件（min.in / heat.in / density.in / product.in）
-- 自动生成运行脚本（bash / Slurm / PBS）
-- 全面的轨迹分析：RMSD、RMSF、回旋半径、SASA、DSSP 二级结构、氢键分析、距离矩阵、聚类分析、PCA、自由能景观图
-- MM-PBSA/GBSA 结合自由能计算
-- 支持蛋白-配体、纯蛋白、蛋白-蛋白复合物体系
-
-**触发关键词：** Amber、MD 模拟、分子动力学、蛋白模拟、antechamber、tleap、pmemd、cpptraj、MMPBSA、RMSD 分析
-
-### 4. storm-research — STORM 多视角研究综述
-
-基于 Stanford STORM/Co-STORM 方法的多视角研究综述技能。使用多代理角色协作进行文献调研、证据综合与引用报告生成。
-
-**核心功能：**
-- 多视角研究（3-8 个视角，支持快速/标准/严格三种深度）
-- 多种文献来源模式（本地优先 / 混合 / 网络优先 / 交互式）
-- 证据基础综合与矛盾映射
-- 引用审计与验证
-- 生成结构化的文献综述报告
-
-**触发关键词：** 文献综述、literature review、STORM、多视角研究、证据综合、引用报告、研究调研
-
-## 安装
-
-```powershell
-git clone https://github.com/A3S-Lab/Science.git
+```text
+A3S Science
+├── Fields / 学科领域
+│   ├── Natural Sciences / 自然科学
+│   │   ├── Mathematics / 数学
+│   │   ├── Physical Sciences / 物理科学
+│   │   └── Biological Sciences / 生物科学
+│   ├── Engineering and Technology / 工程与技术
+│   ├── Medical and Health Sciences / 医学与健康科学
+│   ├── Agricultural and Veterinary Sciences / 农业与兽医学
+│   ├── Social Sciences / 社会科学
+│   └── Humanities and the Arts / 人文与艺术
+└── Capabilities / 科研能力
+    ├── Literature Discovery / 文献发现
+    ├── Scientific Computing / 科学计算
+    ├── Modeling and Simulation / 建模与仿真
+    ├── Agentic Research Workflows / 智能科研工作流
+    └── Reproducibility and Validation / 可复现性与验证
 ```
 
-将需要的技能目录复制到 Claude Code 的 skills 目录：
+The field vocabulary follows the OECD Fields of Research and Development
+classification in the Frascati Manual. `Multidisciplinary Research / 多学科研究`
+is the clearly marked A3S extension. The complete canonical table is in
+[taxonomy documentation](docs/taxonomy.md) and
+[`taxonomy.json`](site/data/taxonomy.json).
 
-```powershell
-# claude-science
-cp -r claude-science/mcp-servers/* $env:USERPROFILE\.claude\mcp\
-cp -r claude-science/skills/<skill-name> $env:USERPROFILE\.claude\skills\<skill-name>
+## Native research tooling
 
-# autodock
-cp -r autodock $env:USERPROFILE\.claude\skills\autodock
+| Directory | Purpose |
+| --- | --- |
+| [`claude-science/`](claude-science/) | Scientific Skills plus Bio Tools and Ketcher MCP servers |
+| [`autodock/`](autodock/) | Automated AutoDock Vina preparation, docking, ranking, and visualization |
+| [`amber-md/`](amber-md/) | Amber molecular-dynamics setup, HPC scripts, and trajectory analysis |
+| [`storm-research/`](storm-research/) | Multi-perspective literature research and evidence synthesis |
 
-# amber-md
-cp -r amber-md $env:USERPROFILE\.claude\skills\amber-md
+Refer to each directory for its installation, runtime, and license requirements.
 
-# storm-research
-cp -r storm-research $env:USERPROFILE\.claude\skills\storm-research
+## Modernization roadmaps
+
+Every one of the 340 retained ScienceSoftware records has its own
+`roadmaps/<resource-id>/ROADMAP.md`. Each plan is generated from a tailored
+research architecture archetype and includes:
+
+- the original research intent and bilingual classification;
+- a browser/PWA, Windows, macOS, and Linux platform contract;
+- headless CLI, notebook, container, HPC, Skill, and MCP interfaces;
+- open formats, provenance, deterministic migration, and validation;
+- evidence, MVP, beta, and stable 1.0 phases;
+- verification, initial issues, risks, and clean-room non-goals.
+
+These are independent product proposals, not claims about a vendor's current
+platform support and not statements of affiliation. See the
+[modernization program](docs/modernization-program.md).
+
+## Data layout
+
+```text
+site/data/
+├── catalog-manifest.json     # snapshot counts and source provenance
+├── taxonomy.json             # canonical bilingual field and capability names
+├── native.jsonl              # A3S-native Skills and MCP resources
+├── ecosystem.jsonl           # Awesome AI for Science selections
+├── sciencesoftware.jsonl     # filtered ScienceSoftware directory metadata
+└── roadmaps.jsonl            # resource-to-roadmap mapping
 ```
 
-各技能的详细安装和配置说明请参见对应目录下的 README。
+Every resource has the same core fields:
 
-## 依赖概览
+```json
+{
+  "id": "eco-deepchem",
+  "name": "DeepChem",
+  "kind": "Software",
+  "disciplines": ["chemical-sciences", "biological-sciences"],
+  "capabilities": ["scientific-machine-learning", "modeling-simulation"],
+  "description": "Concise research-oriented description.",
+  "url": "https://canonical.example/",
+  "origin": "ecosystem",
+  "status": "Curated",
+  "featured": true,
+  "tags": ["Molecular ML"],
+  "language": "en",
+  "source": "Awesome AI for Science",
+  "sourceId": "DeepChem"
+}
+```
 
-| 技能 | 外部软件 | Python 库 |
-|------|---------|-----------|
-| claude-science | 按技能各异（详见子目录） | 按技能各异（详见子目录） |
-| autodock | AutoDock Vina, OpenBabel, MGLTools | numpy, pandas, matplotlib, rdkit |
-| amber-md | AmberTools 26+, Amber 26+ | numpy, pandas, matplotlib |
-| storm-research | 无 | Python 3.10+（用于引用验证脚本） |
+## Reproduce and validate
 
-## 许可证
+Run commands from this repository, not the parent monorepo:
 
-各技能遵循其各自的许可证。autodock 采用 MIT 许可证。
+```powershell
+# Refresh the filtered ScienceSoftware snapshot.
+powershell -ExecutionPolicy Bypass -File scripts/sync-sciencesoftware.ps1
+
+# Regenerate all per-resource modernization plans and their site mapping.
+powershell -ExecutionPolicy Bypass -File scripts/generate-modernization-roadmaps.ps1
+
+# Validate taxonomy IDs, source counts, arrays, URLs, filters, roadmaps, assets,
+# file-size rules, and the vendored graph dependency checksum.
+powershell -ExecutionPolicy Bypass -File scripts/validate-site-data.ps1
+
+# Preview the static site.
+powershell -ExecutionPolicy Bypass -File scripts/serve-site.ps1
+```
+
+The GitHub Pages workflow runs the same validator before publishing `site/`.
+
+## Attribution and licenses
+
+Catalog records retain their source and canonical URL. Inclusion does not
+endorse a resource or relicense its code or content. Native subprojects retain
+their own licenses. The vendored `3d-force-graph` browser distribution is MIT
+licensed; its notice and checksum are under [`site/vendor/`](site/vendor/).
