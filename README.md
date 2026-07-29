@@ -44,12 +44,16 @@ a3s upgrade use/a3s/native-autodock
 a3s uninstall use/a3s/native-autodock
 ```
 
-The GitHub Pages deployment also hosts a TUF-signed registry. It can be enrolled
-with the public bootstrap-root digest shown on the website. Native Skill
-packages include their lightweight scripts and references. MCP and ecosystem
-packages install managed entry contracts; ScienceSoftware packages retain
-directory metadata, classification, and the canonical source link, never an
-upstream software binary. See the
+The GitHub Pages deployment also hosts a TUF-signed, locally searchable plugin
+catalog. It can be enrolled with the public bootstrap-root digest shown on the
+website. Search and review use only signed metadata; package archives are
+downloaded only when an install is prepared. Every current Science archive
+installs one Skill surface: native packages include their lightweight scripts
+and references, while MCP, ecosystem, and ScienceSoftware records install a
+catalog/workflow wrapper with metadata and a canonical source link. A
+resource's catalog `kind` describes the upstream resource and does not claim
+that its corresponding MCP server, web service, CLI, or software binary is
+bundled. See the
 [package registry contract](docs/package-registry.md).
 
 ## Catalog snapshot
@@ -172,7 +176,7 @@ cargo run --manifest-path tools/registry-builder/Cargo.toml `
   --catalog site/data/packages.jsonl `
   --output site/registry `
   --key-file .registry-signing-key `
-  --metadata-version 2 `
+  --metadata-version 3 `
   --expires 2030-01-01T00:00:00Z
 
 # Validate taxonomy IDs, source counts, URLs, filters, permanent pages,

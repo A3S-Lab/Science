@@ -43,10 +43,11 @@ a3s install use/a3s/native-autodock
 The registry name `a3s-lab` is derived by the CLI from the Pages host. Package
 installs use the stable channel and portable `any` target.
 
-## Package roles
+## Package roles and surfaces
 
 The registry does not pretend that every upstream resource has the same
-delivery boundary:
+delivery boundary. The source catalog role determines the content of the
+wrapper:
 
 | Role | Installed content |
 | --- | --- |
@@ -54,6 +55,13 @@ delivery boundary:
 | MCP entry | A managed knowledge card, interface contract, and canonical service-runtime entry point |
 | Ecosystem adapter | A curated upstream knowledge card, integration contract, and canonical source link |
 | Catalog reference | Directory metadata, classification, and a canonical source link; no upstream software binary |
+
+Every archive currently declares exactly one `Skill` surface because that is
+the surface the archive actually contains. The source catalog's `kind` remains
+search metadata: an entry classified as an MCP server or software package does
+not imply that its server, CLI, web service, or upstream binary is bundled or
+deployed. Future native MCP, Tool, and UI packages must declare those surfaces
+only when their deployable descriptors and payloads are present.
 
 Native assets larger than 16 MiB are not duplicated into registry archives.
 The canonical source remains the download location for large datasets, model
@@ -77,10 +85,28 @@ site/
         └── extensions/a3s/<resource-id>/<version>/stable/any/*.tar.gz
 ```
 
-TUF metadata signs every archive path, length, SHA-256, package ID, semantic
-version, channel, and target. The A3S Use installer then repeats metadata
-verification, downloads the exact target, validates the ACL manifest, rejects
-unsafe archive entries, and activates the Skill package under managed roots.
+Each TUF target carries a complete `a3s.use.plugin-catalog.v1` record in
+`custom.a3s`. The signed record binds:
+
+- package identity, display name, publisher, description, keywords, and
+  categories;
+- version, release channel, target, A3S Use compatibility, and availability;
+- the actual Skill/MCP/Tool/UI surface declarations;
+- the permission ceiling and its digest;
+- archive path, byte length, SHA-256 digest, expanded byte and file counts;
+- license and repository provenance.
+
+The archive path, length, and SHA-256 in the catalog record must exactly match
+the enclosing TUF target. A3S Use can therefore search, filter, page through,
+and inspect the complete catalog without downloading any package archive.
+Online discovery refreshes and verifies the TUF roles. Subsequent local
+discovery uses the exact cached metadata bytes and repeats signature,
+expiration, schema, compatibility, and target-binding checks without network
+access.
+
+Installation is a separate phase. It downloads only the selected exact target,
+repeats target integrity checks, validates the ACL manifest, rejects unsafe
+archive entries, and activates the Skill package under managed roots.
 
 ## Regenerate and verify
 
@@ -94,7 +120,7 @@ cargo run --manifest-path tools/registry-builder/Cargo.toml `
   --catalog site/data/packages.jsonl `
   --output site/registry `
   --key-file .registry-signing-key `
-  --metadata-version 2 `
+  --metadata-version 3 `
   --expires 2030-01-01T00:00:00Z
 
 powershell -ExecutionPolicy Bypass -File scripts/serve-site.ps1
@@ -105,10 +131,12 @@ cargo run --manifest-path tools/registry-builder/Cargo.toml `
   site/registry/index.json
 ```
 
-The verifier uses the released `a3s-use-extension` implementation to refresh
-all TUF roles and install `a3s/native-autodock` into temporary managed roots.
-This tests metadata signatures, target integrity, archive safety, ACL parsing,
-native Skill content, and activation.
+The verifier uses `a3s-use-extension` to refresh all TUF roles, discover all
+472 signed records across a remote first page and offline cached pagination,
+and install `a3s/native-autodock` into temporary managed roots. This tests
+metadata signatures and expiration, the full catalog schema, deterministic
+pagination, offline cache verification, target integrity, archive safety, ACL
+parsing, native Skill content, and activation.
 
 ## Signing-key operations
 

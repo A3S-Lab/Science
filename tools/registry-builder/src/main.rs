@@ -14,6 +14,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::{json, Map, Value};
 use sha2::{Digest, Sha256};
 
+mod catalog;
+
 const REGISTRY_URL: &str = "https://a3s-lab.github.io/Science/registry/";
 const REGISTRY_NAME: &str = "a3s-lab";
 const DEFAULT_EXPIRES: &str = "2030-01-01T00:00:00Z";
@@ -43,6 +45,7 @@ struct PackageRecord {
     version: String,
     channel: String,
     target: String,
+    status: String,
     package_role: String,
     install_command: String,
     upgrade_command: String,
@@ -258,6 +261,16 @@ fn validate_catalog(packages: &[PackageRecord]) -> Result<()> {
                 package.resource_id
             );
         }
+        if !matches!(
+            package.status.as_str(),
+            "available" | "deprecated" | "withdrawn"
+        ) {
+            bail!(
+                "package '{}' has unsupported availability '{}'",
+                package.resource_id,
+                package.status
+            );
+        }
         if package.install_command != format!("a3s install {}", package.component_id)
             || package.upgrade_command != format!("a3s upgrade {}", package.component_id)
             || package.uninstall_command != format!("a3s uninstall {}", package.component_id)
@@ -368,6 +381,7 @@ fn build_packages(packages: &[PackageRecord], output: &Path) -> Result<Map<Strin
             "extensions/{}/{}/{}/{}/{}",
             package.package_id, package.version, package.channel, package.target, archive_name
         );
+        let catalog = catalog::build_catalog_record(package, &target_name, &archive)?;
         write_bytes(&output.join("targets").join(&target_name), &archive)?;
         targets.insert(
             target_name,
@@ -375,13 +389,7 @@ fn build_packages(packages: &[PackageRecord], output: &Path) -> Result<Map<Strin
                 "length": archive.len(),
                 "hashes": {"sha256": sha256(&archive)},
                 "custom": {
-                    "a3s": {
-                        "schemaVersion": 1,
-                        "packageId": package.package_id,
-                        "version": package.version,
-                        "channel": package.channel,
-                        "target": package.target
-                    }
+                    "a3s": catalog
                 }
             }),
         );

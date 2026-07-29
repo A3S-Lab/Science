@@ -1,7 +1,10 @@
+use std::collections::BTreeSet;
 use std::path::PathBuf;
 
+use a3s_use_core::{PluginReleaseChannel, PluginSurfaceKind, PLUGIN_CATALOG_SCHEMA};
 use a3s_use_extension::{
-    refresh_remote_registry, ExtensionPaths, ExtensionRegistry, TrustedRegistry,
+    search_cached_plugins, search_remote_plugins, ExtensionPaths, ExtensionRegistry,
+    PluginCatalogAvailability, PluginCatalogHost, PluginCatalogSearch, TrustedRegistry,
 };
 use anyhow::{bail, Context, Result};
 use serde::Deserialize;
@@ -41,13 +44,65 @@ async fn main() -> Result<()> {
     )
     .map_err(anyhow::Error::new)?;
 
-    let metadata = refresh_remote_registry(&trusted)
+    let host = PluginCatalogHost::current().map_err(anyhow::Error::new)?;
+    let mut search = PluginCatalogSearch {
+        query: "science".to_owned(),
+        kind: Some(PluginSurfaceKind::Skill),
+        channel: Some(PluginReleaseChannel::Stable),
+        publisher: Some("a3s".to_owned()),
+        category: Some("science".to_owned()),
+        availability: Some(PluginCatalogAvailability::Available),
+        cursor: None,
+        limit: 50,
+    };
+    let mut page = search_remote_plugins(&trusted, &host, &search)
         .await
         .map_err(anyhow::Error::new)?;
-    if metadata.package_targets != index.package_count {
+    if page.snapshot.metadata.package_targets != index.package_count
+        || page.snapshot.catalog_records != index.package_count
+        || page.total_matches != index.package_count
+    {
         bail!(
-            "verified {} signed targets, expected {}",
-            metadata.package_targets,
+            "verified {} signed targets, {} catalog records, and {} matches; expected {}",
+            page.snapshot.metadata.package_targets,
+            page.snapshot.catalog_records,
+            page.total_matches,
+            index.package_count
+        );
+    }
+    let snapshot_digest = page.snapshot.snapshot_digest.clone();
+    let mut discovered = BTreeSet::new();
+    loop {
+        for plugin in &page.plugins {
+            if plugin.record.schema != PLUGIN_CATALOG_SCHEMA
+                || plugin.record.surfaces.len() != 1
+                || plugin.record.surfaces[0].kind != PluginSurfaceKind::Skill
+                || plugin.record.archive.length == 0
+                || !discovered.insert(plugin.record.package_id.clone())
+            {
+                bail!(
+                    "catalog record '{}' is incomplete or duplicated",
+                    plugin.record.package_id
+                );
+            }
+        }
+        let Some(cursor) = page.next_cursor else {
+            break;
+        };
+        search.cursor = Some(cursor);
+        page = search_cached_plugins(&trusted, &host, &search)
+            .await
+            .map_err(anyhow::Error::new)?;
+        if page.snapshot.snapshot_digest != snapshot_digest
+            || page.total_matches != index.package_count
+        {
+            bail!("offline catalog pagination changed the verified snapshot");
+        }
+    }
+    if discovered.len() as u64 != index.package_count {
+        bail!(
+            "discovered {} unique catalog records, expected {}",
+            discovered.len(),
             index.package_count
         );
     }
@@ -82,8 +137,8 @@ async fn main() -> Result<()> {
     }
 
     println!(
-        "Verified {} TUF targets and installed {}@{} with a Skill surface.",
-        metadata.package_targets,
+        "Verified and discovered {} TUF catalog records, then installed {}@{} with a Skill surface.",
+        discovered.len(),
         installed.extension.manifest.package_id,
         installed.extension.manifest.version
     );
