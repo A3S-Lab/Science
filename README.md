@@ -24,14 +24,14 @@ All 472 catalog entries have permanent detail pages with their description,
 bilingual classification, source, related resources, and A3S lifecycle
 commands.
 
-The graph uses the interaction and performance principles of the A3S Web memory
-graph: a cohesive bounded subgraph, searchable nodes, selected-neighbor
+The graph uses the interaction and performance principles of the A3S design
+system: a cohesive bounded subgraph, searchable nodes, selected-neighbor
 highlighting, camera focus, a rendering cap, reduced-motion support, and an
 always-available accessible list.
 
-The Chinese application shell follows the A3S Web interface: the same sidebar
-proportions, panel hierarchy, control sizing, typography, color tokens,
-responsive drawer behavior, and light/dark themes.
+The Chinese application shell follows the shared A3S interface system, with the
+same sidebar proportions, panel hierarchy, control sizing, typography, color
+tokens, responsive drawer behavior, and light/dark themes.
 
 ## Package registry
 
