@@ -1,5 +1,11 @@
 # A3S Science
 
+<p align="center">
+  <strong>Language / 语言:</strong>
+  <a href="README.md">English</a> ·
+  <a href="README.zh-CN.md">中文</a>
+</p>
+
 Scientific Skills, MCP servers, research software, agents, and knowledge tooling
 for A3S.
 
